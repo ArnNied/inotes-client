@@ -6,7 +6,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('iNotes'),
+      title: const Text('iNotes', style: TextStyle(fontSize: 30)),
+      centerTitle: true,
     );
   }
 

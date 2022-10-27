@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/",
+      initialRoute: "/auth/login",
       routes: {
         "/": (context) => const NoteListPage(),
         "/note/detail": (context) => const NoteDetailPage(),
