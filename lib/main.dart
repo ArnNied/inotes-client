@@ -40,7 +40,20 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        // primarySwatch: Colors.blue,
+        primarySwatch: const MaterialColor(0xFF579AE2, {
+          50: Color(0xffabcdf1),
+          100: Color(0xff9ac2ee),
+          200: Color(0xff89b8eb),
+          300: Color(0xff79aee8),
+          400: Color(0xff68a4e5),
+          500: Color(0xff579AE2),
+          600: Color(0xff4e8bcb),
+          700: Color(0xff467bb5),
+          800: Color(0xff3d6c9e),
+          900: Color(0xff345c88),
+        }),
+        fontFamily: 'Poppins',
       ),
       initialRoute: "/auth/login",
       routes: {
