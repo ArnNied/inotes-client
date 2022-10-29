@@ -7,7 +7,7 @@ import 'package:inotes/pages/note/create.dart';
 import 'package:inotes/pages/note/detail.dart';
 import 'package:inotes/pages/note/edit.dart';
 import 'package:inotes/pages/note/list.dart';
-import 'package:inotes/pages/profile.dart';
+import 'package:inotes/pages/account/profile.dart';
 
 import 'cubit/session_cubit.dart';
 

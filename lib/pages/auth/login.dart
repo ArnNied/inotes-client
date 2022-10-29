@@ -146,26 +146,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   )))),
       backgroundColor: Color.fromARGB(255, 25, 0, 92),
-      // appBar: const CustomAppBar(),
-      // body: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       const Text(
-      //         'You have pushed the button this many times:',
-      //       ),
-      //       Text(
-      //         '$_counter',
-      //         style: Theme.of(context).textTheme.headline4,
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/note/detail.dart';
 import 'package:inotes/pages/note/create.dart';
 import 'package:inotes/model/note.dart';
+import 'package:inotes/pages/account/profile.dart';
 
 // import 'package:inotes/widgets/sidebar.dart';
 
@@ -144,9 +145,9 @@ class _NoteListPageState extends State<NoteListPage> {
           ),
           ListTile(
             trailing: const Icon(Icons.settings), //Ini Icon
-            title: const Text("Settings"),
+            title: const Text("My Account"),
             onTap: () {
-              // Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
             },
           ),
           ListTile(
