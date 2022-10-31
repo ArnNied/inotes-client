@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-// import 'package:inotes/components/common/appbar.dart';
-
-import 'package:inotes/pages/note/list.dart';
-import 'package:inotes/pages/auth/register.dart';
-import 'package:inotes/pages/auth/forgot_password.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,138 +8,128 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Padding(
-              padding: const EdgeInsets.only(
-                  // top: 250,
-                  // // bottom: 250,
-                  // left: 50,
-                  // right: 50,
+      backgroundColor: const Color.fromARGB(255, 25, 0, 92),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Container(
+              width: 350,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: const Text(
+                      "iNotes",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 0, 174, 255),
+                      ),
+                    ),
                   ),
-              child: Container(
-                  height: 350,
-                  width: 350,
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.all(const Radius.circular(5))),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                          padding: const EdgeInsets.only(top: 20, bottom: 20),
-                          child: Text("iNotes",
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 0, 174, 255)))),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            top: 5, left: 10, right: 10, bottom: 10),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(10),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 0, 174, 255),
-                                    width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 0, 174, 255),
-                                    width: 2.0),
-                              ),
-                              hintText: 'E-mail'),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            top: 5, left: 10, right: 10, bottom: 10),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(10),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 0, 174, 255),
-                                    width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 0, 174, 255),
-                                    width: 2.0),
-                              ),
-                              hintText: 'Password'),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: SizedBox(
-                          height: 30,
-                          width: 300,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NoteListPage()));
-                            },
-                            child: const Text('LOGIN'),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5, left: 10, right: 10, bottom: 10),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.all(12),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 174, 255),
+                                width: 2.0),
                           ),
-                        ),
-                      ),
-                      Container(
-                          padding: const EdgeInsets.only(top: 5, bottom: 5),
-                          child: new InkWell(
-                            onTap: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ForgotPasswordPage()))
-                            },
-                            child: new Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 0, 174, 255)),
-                            ),
-                          )),
-                      const Divider(
-                        color: Colors.black,
-                        height: 20,
-                        thickness: 1,
-                        indent: 20,
-                        endIndent: 20,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: SizedBox(
-                          height: 30,
-                          width: 300,
-                          child: ElevatedButton(
-                            onPressed: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterPage()))
-                            },
-                            child: const Text('REGISTER'),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 174, 255),
+                                width: 2.0),
                           ),
-                        ),
-                      )
-                    ],
-                  )))),
-      backgroundColor: Color.fromARGB(255, 25, 0, 92),
+                          hintText: 'E-mail'),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5, left: 10, right: 10, bottom: 10),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.all(12),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 174, 255),
+                                width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 174, 255),
+                                width: 2.0),
+                          ),
+                          hintText: 'Password'),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: SizedBox(
+                      height: 30,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: const Text('LOGIN'),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/auth/forgot-password');
+                    },
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 174, 255)),
+                    ),
+                  ),
+                  const Divider(
+                    color: Colors.black,
+                    height: 20,
+                    thickness: 1,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: SizedBox(
+                      height: 30,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => {
+                          Navigator.pushNamed(
+                            context,
+                            '/auth/register',
+                          )
+                        },
+                        child: const Text('REGISTER'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

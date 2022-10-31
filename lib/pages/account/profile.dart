@@ -18,13 +18,13 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            const ChangeUsername(),
-            const ChangePassword(),
-            const DeleteAccount(),
-          ]
-        )
-      )
+          children: const <Widget>[
+            ChangeUsername(),
+            ChangePassword(),
+            DeleteAccount(),
+          ],
+        ),
+      ),
     );
   }
 }

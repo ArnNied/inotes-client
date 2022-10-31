@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inotes/cubit/session_cubit.dart';
+import 'package:inotes/components/drawer.dart';
 import 'package:inotes/components/common/appbar.dart';
-import 'package:inotes/pages/auth/login.dart';
-import 'package:inotes/pages/note/detail.dart';
-import 'package:inotes/pages/note/create.dart';
 import 'package:inotes/model/note.dart';
-import 'package:inotes/pages/account/profile.dart';
-
-// import 'package:inotes/widgets/sidebar.dart';
 
 class NoteListPage extends StatefulWidget {
   const NoteListPage({super.key});
@@ -18,7 +11,7 @@ class NoteListPage extends StatefulWidget {
 }
 
 class _NoteListPageState extends State<NoteListPage> {
-  var _limitText = 500;
+  final int _limitText = 500;
 
   List<Note> notes = [
     Note(
@@ -57,123 +50,13 @@ class _NoteListPageState extends State<NoteListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // List<Widget> notesList = notes
-    //     .map(
-    //       (note) => GestureDetector(
-    //         onTap: () {
-    //           Navigator.pushNamed(context, "/note/detail", arguments: note);
-    //         },
-    //         // child: AbsorbPointer(
-    //         child: Column(
-    //           children: <Widget>[
-    //             Container(
-    //               margin: const EdgeInsets.only(top: 5, bottom: 5),
-    //               // height: 200,
-    //               // color: Color.fromARGB(255, 255, 255, 255), // tidak boleh disini
-    //               padding:
-    //                   const EdgeInsets.only(left: 15, top: 10), //jarak teks
-    //               decoration: BoxDecoration(
-    //                   color: Color.fromARGB(255, 255, 255, 255),
-    //                   borderRadius:
-    //                       BorderRadius.all(const Radius.circular(10))),
-
-    //               child: Container(
-    //                 child: Column(
-    //                   children: <Widget>[
-    //                     Container(
-    //                       // judul catatan
-    //                       alignment: Alignment.topLeft,
-    //                       child: Text(
-    //                         note.title,
-    //                         style: TextStyle(
-    //                             fontSize: 23, fontWeight: FontWeight.bold),
-    //                       ),
-    //                     ),
-    //                     Container(
-    //                       // isi catatan
-    //                       alignment: Alignment.bottomLeft,
-    //                       margin: const EdgeInsets.only(top: 10, bottom: 10),
-    //                       child: Text(
-    //                         note.body,
-    //                         style: TextStyle(fontSize: 13),
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //         // ),
-    //       ),
-    //     )
-    //     .toList();
-
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(padding: EdgeInsets.zero, children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const UserAccountsDrawerHeader(
-              // child: DrawerHeader(
-              arrowColor: Color.fromARGB(255, 255, 255, 255),
-              // accountName: Text('My Account'),
-              accountName: Text('Ricardo Milos'),
-              accountEmail: Text('RicardoMilos@Undead.com'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage(
-                    'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    // image: NetworkImage(
-                    // 'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg')
-                    image: AssetImage(
-                        'assets/image/ubuntu-20.04-wallpaper.png')), //atur dulu di pubspec.yaml
-              ),
-              // child: Text('Drawer Header'),
-            ),
-          ),
-          ListTile(
-            trailing: const Icon(Icons.home), //Ini Icon
-            title: const Text("Home"),
-            onTap: () {
-              // Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            trailing: const Icon(Icons.settings), //Ini Icon
-            title: const Text("My Account"),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
-            },
-          ),
-          ListTile(
-            trailing: const Icon(Icons.info), //Ini Icon
-            title: const Text("About Us"),
-            onTap: () {
-              // Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            trailing: const Icon(Icons.logout), //Ini Icon
-            title: const Text("Logout"),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()));
-            },
-          ),
-        ]),
-      ),
+      drawer: const CustomDrawer(),
       appBar: const CustomAppBar(),
       body: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemCount: notes.length,
         padding: const EdgeInsets.all(8),
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemBuilder: (context, index) => Material(
           color: const Color.fromARGB(255, 255, 255, 255),
           borderRadius: BorderRadius.circular(8),
@@ -191,7 +74,7 @@ class _NoteListPageState extends State<NoteListPage> {
               padding: const EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     notes[index].title,
                     style: const TextStyle(
@@ -199,8 +82,9 @@ class _NoteListPageState extends State<NoteListPage> {
                   ),
                   const SizedBox(height: 10),
                   // Text(notes[index].body),
-                  Text(notes[index].body.length >= _limitText ? 
-                  notes[index].body.substring(0, _limitText) : notes[index].body),
+                  Text(notes[index].body.length >= _limitText
+                      ? notes[index].body.substring(0, _limitText)
+                      : notes[index].body),
                 ],
               ),
             ),

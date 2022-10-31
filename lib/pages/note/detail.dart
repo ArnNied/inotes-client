@@ -3,9 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:inotes/components/common/appbar.dart';
 import 'package:inotes/model/note.dart';
-// import 'package:inotes/components/common/appbar.dart';
-
-import 'package:inotes/pages/note/edit.dart';
 
 enum Menu { itemEdit, itemDelete }
 
@@ -28,10 +25,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             // setState(() {});
             onSelected: (Menu menu) {
               if (menu == Menu.itemEdit) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const NoteEditPage()));
+                Navigator.pushNamed(context, "/note/edit", arguments: note);
               } else if (menu == Menu.itemDelete) {
                 // Delete
               }
@@ -52,14 +46,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       body: ListView(
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.only(top: 20, left: 20),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Text(
               note.title,
-              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Text(
               note.body,
               style: const TextStyle(fontSize: 15),
