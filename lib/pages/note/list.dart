@@ -18,12 +18,14 @@ class NoteListPage extends StatefulWidget {
 }
 
 class _NoteListPageState extends State<NoteListPage> {
+  var _limitText = 500;
+
   List<Note> notes = [
     Note(
       id: "1",
       title: "Note 1",
       body:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat. ",
+          "😀😀😀Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat.",
       createdAt: 0,
       lastUpdated: 0,
     ),
@@ -196,7 +198,9 @@ class _NoteListPageState extends State<NoteListPage> {
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  Text(notes[index].body)
+                  // Text(notes[index].body),
+                  Text(notes[index].body.length >= _limitText ? 
+                  notes[index].body.substring(0, _limitText) : notes[index].body),
                 ],
               ),
             ),
