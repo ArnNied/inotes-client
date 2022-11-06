@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:inotes/logic/auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -8,6 +12,43 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _onLoginButtonClick() async {
+    // "Do not use BuildContexts across async gaps" workaround
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    final req = await Auth().login(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    Map<String, dynamic> res = jsonDecode(req.body);
+
+    if (req.statusCode == 200) {
+      navigator.pushReplacementNamed("/");
+    } else if (req.statusCode == 400 || req.statusCode == 404) {
+      // show error message
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(res["message"]),
+        ),
+      );
+    } else {
+      // throw an exception
+      throw Exception("Unexpected status code: ${req.statusCode}");
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(
                         top: 5, left: 10, right: 10, bottom: 10),
                     child: TextFormField(
+                      controller: _emailController,
                       decoration: const InputDecoration(
                           isCollapsed: true,
                           contentPadding: EdgeInsets.all(12),
@@ -60,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(
                         top: 5, left: 10, right: 10, bottom: 10),
                     child: TextFormField(
+                      controller: _passwordController,
                       decoration: const InputDecoration(
                           isCollapsed: true,
                           contentPadding: EdgeInsets.all(12),
@@ -82,9 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 30,
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/');
-                        },
+                        onPressed: _onLoginButtonClick,
                         child: const Text('LOGIN'),
                       ),
                     ),
