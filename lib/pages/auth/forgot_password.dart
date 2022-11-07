@@ -8,119 +8,155 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isHidden = true;
+
+  final TextEditingController _emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Container(
-              width: 350,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: const Text(
-                      "iNotes",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 174, 255),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: const Text(
-                      "We will reset your account's password and send you an email containing the new password. Please change your password after you log in",
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color.fromARGB(255, 2, 2, 2),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        isCollapsed: true,
-                        contentPadding: EdgeInsets.all(12),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 0, 174, 255),
-                              width: 2.0),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Form(
+              key: _formKey,
+              child: Container(
+                width: 350,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: const Text(
+                        "iNotes",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 174, 255),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 0, 174, 255),
-                              width: 2.0),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: const Text(
+                        "We will reset your account's password and send you an email containing the new password. Please change your password after you log in",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Color.fromARGB(255, 2, 2, 2),
                         ),
-                        labelText: 'E-mail',
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: SizedBox(
-                      height: 30,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('RESET'),
-                      ),
-                    ),
-                  ),
-                  const Divider(
-                    color: Colors.black,
-                    height: 20,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: SizedBox(
-                      height: 30,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => {
-                          Navigator.pushNamed(
-                            context,
-                            "/auth/login",
-                          )
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          hintText: 'E-mail',
+                          // labelText: 'E-mail',
+                          contentPadding: EdgeInsets.all(12),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 174, 255),
+                                width: 2.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 0, 174, 255),
+                                width: 2.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.red.shade500,
+                                width: 2.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.red.shade500,
+                                width: 2.0),
+                          ),
+                        ),
+                        validator: (thisEmail) {
+                          if (thisEmail == null || thisEmail.isEmpty) {
+                            return 'Email harus diisi';
+                          }
+                          //validasi email
+                          Pattern pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                          RegExp regex = RegExp(pattern.toString());
+
+                          if (!regex.hasMatch(thisEmail)) {
+                            return "Email tidak valid";
+                          }
+                          return null;
                         },
-                        child: const Text('LOGIN'),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: SizedBox(
-                      height: 30,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => {
-                          Navigator.pushNamed(
-                            context,
-                            '/auth/register',
-                          )
-                        },
-                        child: const Text('REGISTER'),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: SizedBox(
+                        height: 30,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            var validate = _formKey.currentState?.validate();
+                            if (validate == true) {
+                              // _onResetButtonClick();
+                              // print(validate);
+                            }
+                          },
+                          child: const Text('RESET'),
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    const Divider(
+                      color: Colors.black,
+                      height: 20,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: SizedBox(
+                        height: 30,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => {
+                            Navigator.pushNamed(context,"/auth/login")
+                          },
+                          child: const Text('LOGIN'),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: SizedBox(
+                        height: 30,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => {
+                            Navigator.pushNamed(
+                              context,
+                              '/auth/register',
+                            )
+                          },
+                          child: const Text('REGISTER'),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
