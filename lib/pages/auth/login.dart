@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:inotes/logic/auth.dart';
-import 'package:provider/provider.dart';
+import 'package:inotes/components/shared/error_box.dart';
+import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -56,22 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Display error if there is one
-    Container errorDisplay = error != ""
-        ? Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.red.shade200,
-            ),
-            child: Text(
-              error,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-            ),
-          )
-        : Container();
+    final errorDisplay = error != "" ? ErrorBox(error: error) : Container();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
@@ -104,96 +90,20 @@ class _LoginPageState extends State<LoginPage> {
                     errorDisplay,
                     Container(
                       padding: const EdgeInsets.only(top: 5, bottom: 10),
-                      child: TextFormField(
+                      child: EmailField(
                         controller: _emailController,
-                        decoration: InputDecoration(
-                            isCollapsed: true,
-                            hintText: 'E-mail',
-                            contentPadding: EdgeInsets.all(12),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 0, 174, 255),
-                                  width: 2.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 0, 174, 255),
-                                  width: 2.0),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.red.shade500,
-                                  width: 2.0),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.red.shade500,
-                                  width: 2.0),
-                            ),
-                          ),
-                        validator: (thisEmail) {
-                          if (thisEmail == null || thisEmail.isEmpty) {
-                            return 'Email harus diisi';
-                          }
-                          //validasi email
-                          Pattern pattern =
-                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                          RegExp regex = RegExp(pattern.toString());
-
-                          if (!regex.hasMatch(thisEmail)) {
-                            return "Email tidak valid";
-                          }
-                          return null;
-                        },
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: TextFormField(
+                      padding: const EdgeInsets.only(top: 5, bottom: 10),
+                      child: PasswordField(
                         controller: _passwordController,
-                        obscureText: _isHidden, //hidden password
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          hintText: 'Password',
-                          contentPadding: EdgeInsets.all(12),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: () {setState(() {_isHidden = !_isHidden;});},
-                            child: Icon(
-                              _isHidden ? Icons.visibility : Icons.visibility_off,
-                              // color: Color.fromARGB(255, 0, 174, 255),
-                            ),
-                          ),
-                        ),
-                        validator: (thisPassword) {
-                          if (thisPassword == null || thisPassword.isEmpty) {
-                            return 'Password harus diisi';
-                          }
-                          int lenPassword = thisPassword.length;
-                          if (lenPassword < 8) {
-                            return 'Password minimal 8 karakter';
-                          }
-                          return null;
-                        }, 
+                        isHidden: _isHidden, //hidden password
+                        onTap: () {
+                          setState(() {
+                            _isHidden = !_isHidden;
+                          });
+                        },
                       ),
                     ),
                     Container(
@@ -202,12 +112,12 @@ class _LoginPageState extends State<LoginPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                        onPressed: () {
-                          var validate = _formKey.currentState?.validate();
-                          if (validate == true) {
-                            _onLoginButtonClick();
-                          }
-                        },
+                          onPressed: () {
+                            var validate = _formKey.currentState?.validate();
+                            if (validate == true) {
+                              _onLoginButtonClick();
+                            }
+                          },
                           child: const Text('LOGIN'),
                         ),
                       ),

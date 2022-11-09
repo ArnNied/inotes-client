@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:inotes/components/common/appbar.dart';
 
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+class ChangePasswordSection extends StatefulWidget {
+  const ChangePasswordSection({super.key});
 
   @override
-  State<ChangePassword> createState() => _ChangePasswordState();
+  State<ChangePasswordSection> createState() => _ChangePasswordSectionState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePasswordSectionState extends State<ChangePasswordSection> {
   @override
   Widget build(BuildContext context) {
     return Container(

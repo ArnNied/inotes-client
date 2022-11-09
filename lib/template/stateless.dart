@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inotes/components/common/appbar.dart';
+import 'package:inotes/components/shared/appbar.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});

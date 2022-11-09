@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/textfield.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -55,47 +56,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      child: TextFormField(
+                      child: EmailField(
                         controller: _emailController,
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          hintText: 'E-mail',
-                          // labelText: 'E-mail',
-                          contentPadding: EdgeInsets.all(12),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                        ),
-                        validator: (thisEmail) {
-                          if (thisEmail == null || thisEmail.isEmpty) {
-                            return 'Email harus diisi';
-                          }
-                          //validasi email
-                          Pattern pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                          RegExp regex = RegExp(pattern.toString());
-
-                          if (!regex.hasMatch(thisEmail)) {
-                            return "Email tidak valid";
-                          }
-                          return null;
-                        },
                       ),
                     ),
                     Container(
@@ -128,9 +90,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => {
-                            Navigator.pushNamed(context,"/auth/login")
-                          },
+                          onPressed: () =>
+                              {Navigator.pushNamed(context, "/auth/login")},
                           child: const Text('LOGIN'),
                         ),
                       ),

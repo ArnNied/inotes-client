@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inotes/components/drawer.dart';
-import 'package:inotes/components/common/appbar.dart';
+import 'package:inotes/components/shared/drawer.dart';
+import 'package:inotes/components/shared/appbar.dart';
 import 'package:inotes/model/note.dart';
 
 class NoteListPage extends StatefulWidget {

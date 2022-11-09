@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:inotes/logic/auth.dart';
-import 'package:provider/provider.dart';
+import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/auth.dart';
+import 'package:inotes/core/validators.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -18,6 +19,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   void _onRegisterButtonClick() async {
     // "Do not use BuildContexts across async gaps" workaround
@@ -33,7 +36,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (req.statusCode == 200) {
       navigator.pushReplacementNamed("/auth/login");
-    } else if (req.statusCode == 201 || req.statusCode == 400 || req.statusCode == 404) {
+    } else if (req.statusCode == 201 ||
+        req.statusCode == 400 ||
+        req.statusCode == 404) {
       // show error message
       scaffoldMessenger.showSnackBar(
         SnackBar(
@@ -82,148 +87,34 @@ class _RegisterPageState extends State<RegisterPage> {
                     Container(
                       padding: const EdgeInsets.only(
                           top: 5, left: 10, right: 10, bottom: 10),
-                      child: TextFormField(
-                        // maxLines: 1, lebar textformfield
+                      child: EmailField(
                         controller: _emailController,
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          hintText: 'E-mail',
-                          contentPadding: EdgeInsets.all(12),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                        ),
-                        validator: (thisEmail) {
-                          if (thisEmail == null || thisEmail.isEmpty) {
-                            return 'Email harus diisi';
-                          }
-                          //validasi email
-                          Pattern pattern =
-                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                          RegExp regex = RegExp(pattern.toString());
-
-                          if (!regex.hasMatch(thisEmail)) {
-                            return "Email tidak valid";
-                          }
-                          return null;
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5, left: 10, right: 10, bottom: 10),
+                      child: PasswordField(
+                        controller: _passwordController,
+                        isHidden: _isHidden,
+                        onTap: () {
+                          setState(() {
+                            _isHidden = !_isHidden;
+                          });
                         },
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.only(
                           top: 5, left: 10, right: 10, bottom: 10),
-                      child: TextFormField(
-                        controller: _passwordController,
-                        obscureText: _isHidden, //hidden password
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          hintText: 'Password',
-                          contentPadding: EdgeInsets.all(12),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: () {setState(() {_isHidden = !_isHidden;});},
-                            child: Icon(
-                              _isHidden ? Icons.visibility : Icons.visibility_off,
-                              // color: Color.fromARGB(255, 0, 174, 255),
-                            ),
-                          ),
-                        ),
-                        validator: (thisPassword) {
-                          if (thisPassword == null || thisPassword.isEmpty) {
-                            return 'Password harus diisi';
-                          }
-                          int lenPassword = thisPassword.length;
-                          if (lenPassword < 8) {
-                            return 'Password minimal 8 karakter';
-                          }
-                          return null;
-                        }, 
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 10),
-                      child: TextFormField(
-                        obscureText: _isHidden, //hidden password
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          hintText: 'Confirm Password',
-                          contentPadding: EdgeInsets.all(12),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.red.shade500,
-                                width: 2.0),
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: () {setState(() {_isHidden = !_isHidden;});},
-                            child: Icon(
-                              _isHidden ? Icons.visibility : Icons.visibility_off,
-                              // color: Color.fromARGB(255, 0, 174, 255),
-                            ),
-                          ),
-                        ),
-                        validator: (thisConfirmPassword) {
-                          if (thisConfirmPassword == null || thisConfirmPassword.isEmpty) {
-                            return 'Password harus diisi';
-                          }
-                          
-                          if (_passwordController.value.text.length >= 8) {
-                            if (thisConfirmPassword != _passwordController.value.text) {
-                              return 'Password tidak sama';
-                            }
-                          }
-                          return null;
+                      child: ConfirmPasswordField(
+                        controller: _confirmPasswordController,
+                        actualPassword: _passwordController.text,
+                        isHidden: _isHidden,
+                        onTap: () {
+                          setState(() {
+                            _isHidden = !_isHidden;
+                          });
                         },
                       ),
                     ),

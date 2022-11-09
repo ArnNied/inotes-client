@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:inotes/components/common/appbar.dart';
 
-class ChangeUsername extends StatefulWidget {
-  const ChangeUsername({super.key});
+class ChangeUsernameSection extends StatefulWidget {
+  const ChangeUsernameSection({super.key});
 
   @override
-  State<ChangeUsername> createState() => _ChangeUsernameState();
+  State<ChangeUsernameSection> createState() => _ChangeUsernameSectionState();
 }
 
-class _ChangeUsernameState extends State<ChangeUsername> {
+class _ChangeUsernameSectionState extends State<ChangeUsernameSection> {
   @override
   Widget build(BuildContext context) {
     return Container(

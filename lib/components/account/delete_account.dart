@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class DeleteAccount extends StatefulWidget {
-  const DeleteAccount({super.key});
+class DeleteAccountSection extends StatefulWidget {
+  const DeleteAccountSection({super.key});
 
   @override
-  State<DeleteAccount> createState() => _DeleteAccountState();
+  State<DeleteAccountSection> createState() => _DeleteAccountSectionState();
 }
 
-class _DeleteAccountState extends State<DeleteAccount> {
+class _DeleteAccountSectionState extends State<DeleteAccountSection> {
   @override
   Widget build(BuildContext context) {
     return Column(
