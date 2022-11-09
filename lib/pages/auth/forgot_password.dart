@@ -71,6 +71,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             if (validate == true) {
                               // _onResetButtonClick();
                               // print(validate);
+                              Navigator.pushNamed(context, "/auth/reset/confirm");
                             }
                           },
                           child: const Text('RESET'),

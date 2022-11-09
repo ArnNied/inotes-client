@@ -8,6 +8,7 @@ import 'package:inotes/pages/note/detail.dart';
 import 'package:inotes/pages/note/edit.dart';
 import 'package:inotes/pages/note/list.dart';
 import 'package:inotes/pages/account/profile.dart';
+import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 
 import 'cubit/session_cubit.dart';
 
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         "/auth/login": (context) => const LoginPage(),
         "/auth/register": (context) => const RegisterPage(),
         "/auth/forgot-password": (context) => const ForgotPasswordPage(),
+        "/auth/reset/confirm": (context) => const ConfirmForgotPasswordPage(),
         "/profile": (context) => const ProfilePage(),
       },
     );

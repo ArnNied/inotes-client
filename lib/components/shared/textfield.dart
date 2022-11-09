@@ -48,7 +48,7 @@ class EmailField extends CustomTextField {
           controller: controller,
           label: "E-mail",
           validator: (email) => emailValidator(email),
-          prefixIcon: Icons.person,
+          prefixIcon: Icons.email,
         );
 }
 
@@ -58,12 +58,14 @@ class PasswordField extends CustomTextField {
     required TextEditingController controller,
     required bool isHidden,
     required void Function() onTap,
+    String? Function(String?)? validator,
+    String label = "Password",
   }) : super(
           key: key,
-          label: "Password",
+          label: label,
           controller: controller,
           obscureText: isHidden,
-          validator: (password) => passwordValidator(password),
+          validator: validator ?? (password) => passwordValidator(password),
           prefixIcon: Icons.lock,
           suffixIcon: InkWell(
             onTap: onTap,
@@ -75,27 +77,21 @@ class PasswordField extends CustomTextField {
         );
 }
 
-class ConfirmPasswordField extends CustomTextField {
+class ConfirmPasswordField extends PasswordField {
   ConfirmPasswordField({
     Key? key,
     required TextEditingController controller,
     required bool isHidden,
-    required String actualPassword,
     required void Function() onTap,
+    required String actualPassword,
+    String label = "Confirm Password",
   }) : super(
           key: key,
-          label: "Confirm Password",
+          label: label,
           controller: controller,
-          obscureText: isHidden,
           validator: (password) =>
               confirmPasswordValidator(password, actualPassword),
-          prefixIcon: Icons.lock,
-          suffixIcon: InkWell(
-            onTap: onTap,
-            child: Icon(
-              isHidden ? Icons.visibility : Icons.visibility_off,
-              // color: Color.fromARGB(255, 0, 174, 255),
-            ),
-          ),
+          isHidden: isHidden,
+          onTap: onTap,
         );
 }
