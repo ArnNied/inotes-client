@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:inotes/model/user.dart';
 import 'package:inotes/pages/account/profile.dart';
 import 'package:inotes/pages/auth/login.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final UserModel user;
+
+  const CustomDrawer({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +16,20 @@ class CustomDrawer extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          child: const UserAccountsDrawerHeader(
+          child: UserAccountsDrawerHeader(
             // child: DrawerHeader(
-            arrowColor: Color.fromARGB(255, 255, 255, 255),
+            arrowColor: const Color.fromARGB(255, 255, 255, 255),
             // accountName: Text('My Account'),
-            accountName: Text('Ricardo Milos'),
-            accountEmail: Text('RicardoMilos@Undead.com'),
+            // accountName: Text('Ricardo Milos'),
+            accountName: Text(user.firstName != null && user.lastName != null
+                ? '${user.firstName} ${user.lastName}'
+                : "-"),
+            accountEmail: Text(user.email),
             // currentAccountPicture: CircleAvatar(
             //   backgroundImage: AssetImage(
             //       'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
             // ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
                   fit: BoxFit.cover,
@@ -46,7 +52,12 @@ class CustomDrawer extends StatelessWidget {
           trailing: const Icon(Icons.settings), //Ini Icon
           title: const Text("My Account"),
           onTap: () {
-            Navigator.pushNamed(context, "/profile");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfilePage(),
+              ),
+            );
           },
         ),
         ListTile(
@@ -60,7 +71,12 @@ class CustomDrawer extends StatelessWidget {
           trailing: const Icon(Icons.logout), //Ini Icon
           title: const Text("Logout"),
           onTap: () {
-            Navigator.pushNamed(context, '/auth/login');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+            );
           },
         ),
       ]),

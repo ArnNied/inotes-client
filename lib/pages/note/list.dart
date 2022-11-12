@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/drawer.dart';
 import 'package:inotes/components/shared/appbar.dart';
+import 'package:inotes/core/session.dart';
+import 'package:inotes/core/user.dart';
 import 'package:inotes/model/note.dart';
+import 'package:inotes/model/user.dart';
+import 'package:inotes/pages/note/create.dart';
+import 'package:inotes/pages/note/detail.dart';
 
 class NoteListPage extends StatefulWidget {
   const NoteListPage({super.key});
@@ -12,9 +19,10 @@ class NoteListPage extends StatefulWidget {
 
 class _NoteListPageState extends State<NoteListPage> {
   final int _limitText = 500;
+  late Future<UserModel> user;
 
-  List<Note> notes = [
-    Note(
+  List<NoteModel> notes = [
+    NoteModel(
       id: "1",
       title: "Note 1",
       body:
@@ -22,7 +30,7 @@ class _NoteListPageState extends State<NoteListPage> {
       createdAt: 0,
       lastUpdated: 0,
     ),
-    Note(
+    NoteModel(
       id: "2",
       title: "Note 2",
       body:
@@ -30,7 +38,7 @@ class _NoteListPageState extends State<NoteListPage> {
       createdAt: 0,
       lastUpdated: 0,
     ),
-    Note(
+    NoteModel(
       id: "3",
       title: "Note 3",
       body:
@@ -38,7 +46,7 @@ class _NoteListPageState extends State<NoteListPage> {
       createdAt: 0,
       lastUpdated: 0,
     ),
-    Note(
+    NoteModel(
       id: "4",
       title: "Note 4",
       body:
@@ -48,10 +56,52 @@ class _NoteListPageState extends State<NoteListPage> {
     ),
   ];
 
+  Future<UserModel> _fetchUserInfo() async {
+    final String? session = await Session.get();
+    final req = await User().getInfo(session!);
+    final res = await jsonDecode(req.body);
+
+    if (req.statusCode == 200) {
+      return UserModel.fromJson(res["data"]);
+    } else {
+      throw Exception('Failed to load user info');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    user = _fetchUserInfo();
+  }
+
+  Future<UserModel> _getUser() async {
+    String? session = await Session.get();
+
+    final req = await User().getInfo(session as String);
+
+    Map<String, dynamic> res = jsonDecode(req.body);
+
+    if (res['status'] == 200) {
+      return UserModel.fromJson(res['data']);
+    } else {
+      return UserModel(email: "", firstName: "", lastName: "");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomDrawer(),
+      // drawer: const CustomDrawer(),
+      drawer: FutureBuilder(
+        future: user,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return CustomDrawer(user: snapshot.data!);
+          } else {
+            return const SizedBox();
+          }
+        },
+      ),
       appBar: const CustomAppBar(),
       body: ListView.separated(
         itemCount: notes.length,
@@ -67,8 +117,12 @@ class _NoteListPageState extends State<NoteListPage> {
               borderRadius: BorderRadius.circular(8),
             ),
             onTap: () {
-              Navigator.pushNamed(context, "/note/detail",
-                  arguments: notes[index]);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NoteDetailPage(note: notes[index]),
+                ),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -95,7 +149,13 @@ class _NoteListPageState extends State<NoteListPage> {
       floatingActionButton: FloatingActionButton(
         // onPressed: () => context.read<SessionCubit>().setSession("asd"),
         onPressed: () => {
-          Navigator.pushNamed(context, "/note/create"),
+          Session.clear(),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NoteCreatePage(),
+            ),
+          ),
         },
         tooltip: 'Create Note',
         child: const Icon(Icons.add),

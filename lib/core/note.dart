@@ -9,8 +9,8 @@ class Auth {
     return await Requests().get(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
     );
   }
@@ -19,19 +19,22 @@ class Auth {
     return await Requests().get(
       endpoint: "/note",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
     );
   }
 
   Future<http.Response> createNote(
-      String session, String title, String body) async {
+    String session,
+    String title,
+    String body,
+  ) async {
     return await Requests().post(
       endpoint: "/note",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
         "title": title,
@@ -41,12 +44,16 @@ class Auth {
   }
 
   Future<http.Response> updateNote(
-      String session, String noteId, String title, String body) async {
+    String session,
+    String noteId,
+    String title,
+    String body,
+  ) async {
     return await Requests().put(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
         "title": title,
@@ -59,8 +66,8 @@ class Auth {
     return await Requests().delete(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
     );
   }

@@ -4,13 +4,13 @@ import 'requests.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Auth {
+class User {
   Future<http.Response> getInfo(String session) async {
     return await Requests().get(
       endpoint: "/user",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
+        HttpHeaders.contentTypeHeader: "application/json",
       },
     );
   }
@@ -36,7 +36,10 @@ class Auth {
   }
 
   Future<http.Response> changePassword(
-      String session, String oldPassword, String newPassword) async {
+    String session,
+    String oldPassword,
+    String newPassword,
+  ) async {
     return await Requests().post(
       endpoint: "/user/change-password",
       headers: {

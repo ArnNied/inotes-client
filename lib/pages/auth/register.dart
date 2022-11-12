@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
-import 'package:inotes/core/validators.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -125,11 +124,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Navigator.pushNamed(context,'/auth/register');
                             var validate = _formKey.currentState?.validate();
                             if (validate == true) {
                               _onRegisterButtonClick();
-                              // print(validate!);
                             }
                           },
                           child: const Text('REGISTER'),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/pages/auth/login.dart';
+import 'package:inotes/pages/auth/register.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -10,7 +12,6 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _isHidden = true;
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -90,8 +91,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () =>
-                              {Navigator.pushNamed(context, "/auth/login")},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
                           child: const Text('LOGIN'),
                         ),
                       ),
@@ -103,10 +110,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => {
-                            Navigator.pushNamed(
+                            Navigator.push(
                               context,
-                              '/auth/register',
-                            )
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterPage(),
+                              ),
+                            ),
                           },
                           child: const Text('REGISTER'),
                         ),

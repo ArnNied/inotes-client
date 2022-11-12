@@ -3,7 +3,9 @@ import 'package:inotes/components/shared/appbar.dart';
 import 'package:inotes/model/note.dart';
 
 class NoteEditPage extends StatefulWidget {
-  const NoteEditPage({super.key});
+  final NoteModel note;
+
+  const NoteEditPage({super.key, required this.note});
 
   @override
   State<NoteEditPage> createState() => _NoteEditPageState();
@@ -12,8 +14,6 @@ class NoteEditPage extends StatefulWidget {
 class _NoteEditPageState extends State<NoteEditPage> {
   @override
   Widget build(BuildContext context) {
-    Note note = ModalRoute.of(context)!.settings.arguments as Note;
-
     return Scaffold(
       appBar: const CustomAppBar(),
       body: ListView(
@@ -36,7 +36,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
           Container(
             padding: const EdgeInsets.all(10),
             child: TextFormField(
-              initialValue: note.title,
+              initialValue: widget.note.title,
               decoration: const InputDecoration(
                 labelText: 'Title',
                 border: OutlineInputBorder(
@@ -51,7 +51,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
           Container(
             padding: const EdgeInsets.all(10),
             child: TextFormField(
-              initialValue: note.body,
+              initialValue: widget.note.body,
               minLines: 5,
               maxLines: null,
               decoration: const InputDecoration(

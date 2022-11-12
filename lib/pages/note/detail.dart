@@ -1,13 +1,14 @@
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
 import 'package:inotes/model/note.dart';
+import 'package:inotes/pages/note/edit.dart';
 
 enum Menu { itemEdit, itemDelete }
 
 class NoteDetailPage extends StatefulWidget {
-  const NoteDetailPage({super.key});
+  final NoteModel note;
+
+  const NoteDetailPage({super.key, required this.note});
 
   @override
   State<NoteDetailPage> createState() => _NoteDetailPageState();
@@ -16,8 +17,6 @@ class NoteDetailPage extends StatefulWidget {
 class _NoteDetailPageState extends State<NoteDetailPage> {
   @override
   Widget build(BuildContext context) {
-    Note note = ModalRoute.of(context)!.settings.arguments as Note;
-
     return Scaffold(
       appBar: CustomAppBar(
         actions: <Widget>[
@@ -25,7 +24,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             // setState(() {});
             onSelected: (Menu menu) {
               if (menu == Menu.itemEdit) {
-                Navigator.pushNamed(context, "/note/edit", arguments: note);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NoteEditPage(note: widget.note),
+                  ),
+                );
               } else if (menu == Menu.itemDelete) {
                 // Delete
               }
@@ -48,7 +52,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Text(
-              note.title,
+              widget.note.title,
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -58,7 +62,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Text(
-              note.body,
+              widget.note.body,
               style: const TextStyle(fontSize: 15),
             ),
           ),

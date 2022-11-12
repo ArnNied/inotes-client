@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/error_box.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
+import 'package:inotes/core/session.dart';
+import 'package:inotes/pages/auth/forgot_password.dart';
+import 'package:inotes/pages/auth/register.dart';
+import 'package:inotes/pages/note/list.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,7 +37,13 @@ class _LoginPageState extends State<LoginPage> {
     Map<String, dynamic> res = jsonDecode(req.body);
 
     if (req.statusCode == 200) {
-      navigator.pushReplacementNamed("/");
+      Session.set(res["data"]["session"]);
+
+      navigator.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const NoteListPage(),
+        ),
+      );
     } else if (req.statusCode == 400 || req.statusCode == 404) {
       // show error message
       setState(() {
@@ -124,7 +134,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/auth/forgot-password');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ForgotPasswordPage(),
+                          ),
+                        );
                       },
                       child: const Text(
                         "Forgot Password?",
@@ -148,10 +163,12 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => {
-                            Navigator.pushNamed(
+                            Navigator.push(
                               context,
-                              '/auth/register',
-                            )
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterPage(),
+                              ),
+                            ),
                           },
                           child: const Text('REGISTER'),
                         ),
