@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/textfield.dart';
 
 class ChangePasswordSection extends StatefulWidget {
   const ChangePasswordSection({super.key});
@@ -8,9 +9,18 @@ class ChangePasswordSection extends StatefulWidget {
 }
 
 class _ChangePasswordSectionState extends State<ChangePasswordSection> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isHidden = true;
+
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmNewPasswordController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Form(
+      key: _formKey,
       child: Column(
         children: <Widget>[
           Container(
@@ -24,83 +34,63 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
           Container(
             width: null,
             padding: const EdgeInsets.only(right: 10, left: 10, bottom: 5),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.all(8),
-                hintText: "Old Password",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 174, 255), width: 2.0
-                      // height: 50,
-                      ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 0, 174, 255),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+            child: PasswordField(
+              controller: _oldPasswordController,
+              label: "Old Password",
+              isHidden: _isHidden,
+              onTap: () {
+                setState(() {
+                  _isHidden = !_isHidden;
+                });
+              },
             ),
           ),
           Container(
             width: null,
             padding:
                 const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 5),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.all(8),
-                hintText: "Password",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 174, 255), width: 2.0
-                      // height: 50,
-                      ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 0, 174, 255),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+            child: PasswordField(
+              controller: _newPasswordController,
+              label: "New Password",
+              isHidden: _isHidden,
+              onTap: () {
+                setState(() {
+                  _isHidden = !_isHidden;
+                });
+              },
             ),
           ),
           Container(
             width: null,
             padding:
                 const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 5),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.all(8),
-                hintText: "Confirm Password",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 174, 255), width: 2.0
-                      // height: 50,
-                      ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 0, 174, 255),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+            child: ConfirmPasswordField(
+              controller: _confirmNewPasswordController,
+              label: "Confirm New Password",
+              isHidden: _isHidden,
+              actualPassword: _newPasswordController.text,
+              onTap: () {
+                setState(() {
+                  _isHidden = !_isHidden;
+                });
+              },
             ),
           ),
           Container(
-              padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Change Password"),
-                ),
-              )),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  var validate = _formKey.currentState?.validate();
+                  if (validate == true) {
+                    // _onLoginButtonClick();
+                  }
+                },
+                child: const Text("Change Password"),
+              ),
+            ),
+          ),
         ],
       ),
     );

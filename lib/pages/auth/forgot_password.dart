@@ -6,6 +6,7 @@ import 'package:inotes/core/auth.dart';
 import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/auth/register.dart';
+import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});

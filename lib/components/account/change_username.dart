@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/textfield.dart';
 
 class ChangeUsernameSection extends StatefulWidget {
   const ChangeUsernameSection({super.key});
@@ -8,9 +9,16 @@ class ChangeUsernameSection extends StatefulWidget {
 }
 
 class _ChangeUsernameSectionState extends State<ChangeUsernameSection> {
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Form(
+      key: _formKey,
       child: Column(
         children: <Widget>[
           Container(
@@ -29,56 +37,33 @@ class _ChangeUsernameSectionState extends State<ChangeUsernameSection> {
                   width: null,
                   child: Expanded(
                     child: Container(
-                      padding: const EdgeInsets.only(right: 10, left: 10),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.all(8),
-                          hintText: "First Name",
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0
-                                // height: 50,
-                                ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(255, 0, 174, 255),
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(right: 10, left: 10),
+                        child: CustomTextField(
+                          controller: _firstNameController,
+                          label: 'First Name',
+                          validator: null,
+                          prefixIcon: const Icon(Icons.person),
+                        )),
                   ),
                 ),
                 Container(
                   width: null,
                   child: Expanded(
                     child: Container(
-                      padding: const EdgeInsets.only(right: 10, left: 10),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.all(8),
-                          hintText: "Last Name",
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 0, 174, 255),
-                                width: 2.0
-                                // height: 50,
-                                ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(255, 0, 174, 255),
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(right: 10, left: 10),
+                        child: CustomTextField(
+                          controller: _lastNameController,
+                          label: 'Last Name',
+                          validator: (thisFirstName) {
+                            if (_lastNameController.text.isNotEmpty ||
+                                _firstNameController.text.isEmpty) {
+                              return "Tidak boleh hanya mengisi Nama Belakang";
+                            }
+
+                            return null;
+                          },
+                          prefixIcon: const Icon(Icons.person),
+                        )),
                   ),
                 ),
               ],
@@ -87,35 +72,26 @@ class _ChangeUsernameSectionState extends State<ChangeUsernameSection> {
           Container(
             width: null,
             padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.all(8),
-                hintText: "Email",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Color.fromARGB(255, 0, 174, 255), width: 2.0
-                      // height: 50,
-                      ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 0, 174, 255),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+            child: EmailField(
+              controller: _emailController,
             ),
           ),
           Container(
-              padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Update Basic Information"),
-                ),
-              )),
+            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  var validate = _formKey.currentState?.validate();
+                  if (validate == true) {
+                    // _onLoginButtonClick();
+                    print(validate);
+                  }
+                },
+                child: const Text("Update Basic Information"),
+              ),
+            ),
+          ),
         ],
       ),
     );
