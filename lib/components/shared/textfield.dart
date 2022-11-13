@@ -8,15 +8,20 @@ class CustomTextField extends TextFormField {
     required String label,
     required String? Function(String?)? validator,
     bool obscureText = false,
-    IconData? prefixIcon,
+    int? maxLines = 1,
+    int? minLines,
+    Widget? prefixIcon,
     Widget? suffixIcon,
   }) : super(
           obscureText: obscureText,
           controller: controller,
+          minLines: minLines,
+          maxLines: maxLines,
           decoration: InputDecoration(
             isCollapsed: true,
             hintText: label,
             labelText: label,
+            alignLabelWithHint: true,
             contentPadding: const EdgeInsets.all(12),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
@@ -32,7 +37,7 @@ class CustomTextField extends TextFormField {
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.red.shade500, width: 2.0),
             ),
-            prefixIcon: Icon(prefixIcon),
+            prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
           ),
           validator: validator,
@@ -48,7 +53,7 @@ class EmailField extends CustomTextField {
           controller: controller,
           label: "E-mail",
           validator: (email) => emailValidator(email),
-          prefixIcon: Icons.email,
+          prefixIcon: const Icon(Icons.email),
         );
 }
 
@@ -66,7 +71,7 @@ class PasswordField extends CustomTextField {
           controller: controller,
           obscureText: isHidden,
           validator: validator ?? (password) => passwordValidator(password),
-          prefixIcon: Icons.lock,
+          prefixIcon: const Icon(Icons.lock),
           suffixIcon: InkWell(
             onTap: onTap,
             child: Icon(

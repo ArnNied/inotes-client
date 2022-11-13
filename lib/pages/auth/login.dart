@@ -26,34 +26,43 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _onLoginButtonClick() async {
-    // "Do not use BuildContexts across async gaps" workaround
-    final navigator = Navigator.of(context);
+    if (_formKey.currentState!.validate()) {
+      // "Do not use BuildContexts across async gaps" workaround
+      final NavigatorState navigator = Navigator.of(context);
+      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
 
-    final req = await Auth().login(
-      _emailController.text,
-      _passwordController.text,
-    );
-
-    Map<String, dynamic> res = jsonDecode(req.body);
-
-    if (req.statusCode == 200) {
-      Session.set(res["data"]["session"]);
-
-      navigator.pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const NoteListPage(),
-        ),
+      final req = await Auth().login(
+        _emailController.text,
+        _passwordController.text,
       );
-    } else if (req.statusCode == 400 || req.statusCode == 404) {
-      // show error message
-      setState(() {
-        error = res["message"];
-      });
-    } else {
-      // throw an exception
-      setState(() {
-        error = "Unexpected status code: ${req.statusCode}";
-      });
+
+      final res = jsonDecode(req.body);
+
+      if (req.statusCode == 200) {
+        Session.set(res["data"]["session"]);
+
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res["message"]),
+          ),
+        );
+
+        navigator.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const NoteListPage(),
+          ),
+        );
+      } else if (req.statusCode == 400) {
+        // show error message
+        setState(() {
+          error = res["message"];
+        });
+      } else {
+        // throw an exception
+        setState(() {
+          error = "Unexpected status code: ${req.statusCode}";
+        });
+      }
     }
   }
 
@@ -67,7 +76,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Display error if there is one
-    final errorDisplay = error != "" ? ErrorBox(error: error) : Container();
+    final errorDisplay =
+        error.isNotEmpty ? ErrorBox(error: error) : Container();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
@@ -123,10 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            var validate = _formKey.currentState?.validate();
-                            if (validate == true) {
-                              _onLoginButtonClick();
-                            }
+                            _onLoginButtonClick();
                           },
                           child: const Text('LOGIN'),
                         ),

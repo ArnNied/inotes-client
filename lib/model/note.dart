@@ -18,8 +18,8 @@ class NoteModel {
       id: json['id'],
       title: json['title'],
       body: json['body'],
-      createdAt: json['createdAt'],
-      lastUpdated: json['lastUpdated'],
+      createdAt: int.parse(json['created_at']),
+      lastUpdated: int.parse(json['last_updated']),
     );
   }
 }

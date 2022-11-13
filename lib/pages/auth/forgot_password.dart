@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/auth.dart';
+import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/auth/register.dart';
 
@@ -14,6 +18,41 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
+
+  void _onResetButtonPressed() async {
+    final NavigatorState navigator = Navigator.of(context);
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+
+    if (_formKey.currentState!.validate()) {
+      final req = await Auth().forgotPassword(_emailController.text);
+      final res = await jsonDecode(req.body);
+
+      if (req.statusCode == 200) {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('A reset code has been sent to your email'),
+          ),
+        );
+
+        navigator.push(MaterialPageRoute(
+          builder: (context) => const ConfirmForgotPasswordPage(),
+        ));
+      } else {
+        messenger.showSnackBar(
+          SnackBar(
+            content:
+                Text('Failed to send password reset email: ${res['message']}'),
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +106,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            var validate = _formKey.currentState?.validate();
-                            if (validate == true) {
-                              // _onResetButtonClick();
-                              // print(validate);
-                              Navigator.pushNamed(context, "/auth/reset/confirm");
-                            }
-                          },
+                          onPressed: () => _onResetButtonPressed(),
                           child: const Text('RESET'),
                         ),
                       ),

@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/error_box.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
+import 'package:inotes/pages/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -14,6 +16,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  String error = "";
   bool _isHidden = true;
 
   final TextEditingController _emailController = TextEditingController();
@@ -22,31 +25,38 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   void _onRegisterButtonClick() async {
-    // "Do not use BuildContexts across async gaps" workaround
-    final navigator = Navigator.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    if (_formKey.currentState!.validate()) {
+      // "Do not use BuildContexts across async gaps" workaround
+      final NavigatorState navigator = Navigator.of(context);
+      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
 
-    final req = await Auth().register(
-      _emailController.text,
-      _passwordController.text,
-    );
-
-    Map<String, dynamic> res = jsonDecode(req.body);
-
-    if (req.statusCode == 200) {
-      navigator.pushReplacementNamed("/auth/login");
-    } else if (req.statusCode == 201 ||
-        req.statusCode == 400 ||
-        req.statusCode == 404) {
-      // show error message
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(res["message"]),
-        ),
+      final req = await Auth().register(
+        _emailController.text,
+        _passwordController.text,
       );
-    } else {
-      // throw an exception
-      throw Exception("Unexpected status code: ${req.statusCode}");
+
+      final res = jsonDecode(req.body);
+
+      if (req.statusCode == 201) {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text("Registration successful! Please login."),
+          ),
+        );
+        navigator.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      } else if (req.statusCode == 400) {
+        // show error message
+        setState(() {
+          error = res["message"];
+        });
+      } else {
+        // throw an exception
+        throw Exception("Unexpected status code: ${req.statusCode}");
+      }
     }
   }
 
@@ -54,11 +64,15 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final errorDisplay =
+        error.isNotEmpty ? ErrorBox(error: error) : Container();
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       body: Center(
@@ -77,22 +91,25 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                        padding: const EdgeInsets.only(top: 20, bottom: 20),
-                        child: const Text("iNotes",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 174, 255)))),
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: const Text(
+                        "iNotes",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 174, 255),
+                        ),
+                      ),
+                    ),
+                    errorDisplay,
                     Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.only(top: 5, bottom: 10),
                       child: EmailField(
                         controller: _emailController,
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.only(top: 5, bottom: 10),
                       child: PasswordField(
                         controller: _passwordController,
                         isHidden: _isHidden,
@@ -104,8 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.only(top: 5, bottom: 10),
                       child: ConfirmPasswordField(
                         controller: _confirmPasswordController,
                         actualPassword: _passwordController.text,
@@ -124,10 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            var validate = _formKey.currentState?.validate();
-                            if (validate == true) {
-                              _onRegisterButtonClick();
-                            }
+                            _onRegisterButtonClick();
                           },
                           child: const Text('REGISTER'),
                         ),
@@ -153,9 +166,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushReplacementNamed(
+                                  Navigator.pushReplacement(
                                     context,
-                                    '/auth/login',
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginPage(),
+                                    ),
                                   );
                                 },
                             ),

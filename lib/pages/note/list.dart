@@ -5,6 +5,7 @@ import 'package:inotes/components/shared/drawer.dart';
 import 'package:inotes/components/shared/appbar.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
+import 'package:inotes/core/note.dart';
 import 'package:inotes/model/note.dart';
 import 'package:inotes/model/user.dart';
 import 'package:inotes/pages/note/create.dart';
@@ -19,42 +20,9 @@ class NoteListPage extends StatefulWidget {
 
 class _NoteListPageState extends State<NoteListPage> {
   final int _limitText = 500;
-  late Future<UserModel> user;
 
-  List<NoteModel> notes = [
-    NoteModel(
-      id: "1",
-      title: "Note 1",
-      body:
-          "😀😀😀Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat.",
-      createdAt: 0,
-      lastUpdated: 0,
-    ),
-    NoteModel(
-      id: "2",
-      title: "Note 2",
-      body:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat. ",
-      createdAt: 0,
-      lastUpdated: 0,
-    ),
-    NoteModel(
-      id: "3",
-      title: "Note 3",
-      body:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat. ",
-      createdAt: 0,
-      lastUpdated: 0,
-    ),
-    NoteModel(
-      id: "4",
-      title: "Note 4",
-      body:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elit metus, fringilla eu leo tincidunt, congue aliquam orci. Integer placerat leo vitae sagittis mollis. In id risus ut neque lobortis placerat. In consequat pretium enim eget mollis. Vivamus vitae lorem at mi tincidunt tempus ac quis nisl. Maecenas vulputate a felis vel dictum. Nam at facilisis urna. Nam efficitur turpis at dictum placerat. ",
-      createdAt: 0,
-      lastUpdated: 0,
-    ),
-  ];
+  late Future<UserModel> user;
+  late Future<List<NoteModel>> notes;
 
   Future<UserModel> _fetchUserInfo() async {
     final String? session = await Session.get();
@@ -68,30 +36,52 @@ class _NoteListPageState extends State<NoteListPage> {
     }
   }
 
+  Future<List<NoteModel>> _fetchUserNotes() async {
+    final String? session = await Session.get();
+    final req = await Note().getNotes(session!);
+    final res = await jsonDecode(req.body);
+
+    if (req.statusCode == 200) {
+      List<NoteModel> temp = res["data"].map<NoteModel>((note) {
+        return NoteModel.fromJson(note);
+      }).toList();
+
+      // Sort by last updated
+      temp.sort((a, b) => b.lastUpdated.compareTo(a.lastUpdated));
+      return temp;
+    } else {
+      throw Exception('Failed to load user notes');
+    }
+  }
+
+  // navigate to note detail page with the selected note
+  void _onNotePressed(NoteModel note) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NoteDetailPage(note: note)),
+    );
+  }
+
+  // navigate to note create page
+  void _onFloatingButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const NoteCreatePage(),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     user = _fetchUserInfo();
-  }
-
-  Future<UserModel> _getUser() async {
-    String? session = await Session.get();
-
-    final req = await User().getInfo(session as String);
-
-    Map<String, dynamic> res = jsonDecode(req.body);
-
-    if (res['status'] == 200) {
-      return UserModel.fromJson(res['data']);
-    } else {
-      return UserModel(email: "", firstName: "", lastName: "");
-    }
+    notes = _fetchUserNotes();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: const CustomDrawer(),
       drawer: FutureBuilder(
         future: user,
         builder: (context, snapshot) {
@@ -103,60 +93,59 @@ class _NoteListPageState extends State<NoteListPage> {
         },
       ),
       appBar: const CustomAppBar(),
-      body: ListView.separated(
-        itemCount: notes.length,
-        padding: const EdgeInsets.all(8),
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) => Material(
-          color: const Color.fromARGB(255, 255, 255, 255),
-          borderRadius: BorderRadius.circular(8),
-          child: InkWell(
-            // customBorder harus sama dengan Material(borderRadius: ...)
-            // UI akan inkonsisten jika tidak sama
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NoteDetailPage(note: notes[index]),
+      body: FutureBuilder(
+        future: notes,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data!.isNotEmpty) {
+              return ListView.separated(
+                padding: const EdgeInsets.all(5),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(snapshot.data![index].title),
+                      subtitle: Text(snapshot.data![index].body.length >
+                              _limitText
+                          ? "${snapshot.data![index].body.substring(0, _limitText)}..."
+                          : snapshot.data![index].body),
+                      onTap: () => _onNotePressed(
+                        snapshot.data![index],
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const SizedBox(),
+              );
+            } else {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Text>[
+                    Text(
+                      "You don't have any notes yet.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                    Text(
+                      "Create one by clicking the button below.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ],
                 ),
               );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    notes[index].title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  // Text(notes[index].body),
-                  Text(notes[index].body.length >= _limitText
-                      ? notes[index].body.substring(0, _limitText)
-                      : notes[index].body),
-                ],
-              ),
-            ),
-          ),
-        ),
+            }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       floatingActionButton: FloatingActionButton(
-        // onPressed: () => context.read<SessionCubit>().setSession("asd"),
-        onPressed: () => {
-          Session.clear(),
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NoteCreatePage(),
-            ),
-          ),
-        },
+        onPressed: () => _onFloatingButtonPressed(),
         tooltip: 'Create Note',
         child: const Icon(Icons.add),
       ),

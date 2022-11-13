@@ -1,23 +1,81 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:inotes/components/shared/error_box.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/auth.dart';
+import 'package:inotes/core/validators.dart';
+import 'package:inotes/pages/auth/forgot_password.dart';
+import 'package:inotes/pages/auth/login.dart';
+import 'package:inotes/pages/auth/register.dart';
 
 class ConfirmForgotPasswordPage extends StatefulWidget {
   const ConfirmForgotPasswordPage({super.key});
 
   @override
-  State<ConfirmForgotPasswordPage> createState() => _ConfirmForgotPasswordPageState();
+  State<ConfirmForgotPasswordPage> createState() =>
+      _ConfirmForgotPasswordPageState();
 }
 
 class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
+  String error = "";
 
   final TextEditingController _resetCodeController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  void _onResetButtonPressed() async {
+    if (_formKey.currentState!.validate()) {
+      // "Do not use BuildContexts across async gaps" workaround
+      final NavigatorState navigator = Navigator.of(context);
+      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+
+      final Response req = await Auth().confirmForgotPassword(
+        _resetCodeController.text,
+        _newPasswordController.text,
+      );
+
+      final res = jsonDecode(req.body);
+
+      if (req.statusCode == 200) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res["message"]),
+          ),
+        );
+        navigator.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      } else if (req.statusCode == 400 || req.statusCode == 404) {
+        // show error message
+        setState(() {
+          error = res["message"];
+        });
+      } else {
+        // throw an exception
+        throw Exception("Unexpected status code: ${req.statusCode}");
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _resetCodeController.dispose();
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final errorDisplay =
+        error.isNotEmpty ? ErrorBox(error: error) : Container();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       body: Center(
@@ -46,6 +104,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                         ),
                       ),
                     ),
+                    errorDisplay,
                     Container(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: const Text(
@@ -57,27 +116,22 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        left: 10,
+                        right: 10,
+                        bottom: 5,
+                      ),
                       child: CustomTextField(
-                        controller: _resetCodeController, 
-                        label: 'Reset Code', 
-                        validator: (thisResetCode) {
-                          if (thisResetCode!.isEmpty || thisResetCode == null) {
-                              return 'Tolong masukan kode reset';
-                            }
-                          // int lenoutputCode = outputCode.length;
-                          if (thisResetCode.length != 6) {
-                            return 'Kode tidak valid';
-                          }
-                          // if (thisResetCode != outputCode) {
-                          //   return 'Kode reset tidak sesuai';
-                          // }
-                        },
-                        prefixIcon: Icons.lock_reset,
+                        controller: _resetCodeController,
+                        label: 'Reset Code',
+                        validator: (token) => resetCodeValidator(token),
+                        prefixIcon: const Icon(Icons.lock_reset),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 5),
+                      padding: const EdgeInsets.only(
+                          top: 5, left: 10, right: 10, bottom: 5),
                       child: PasswordField(
                         controller: _newPasswordController,
                         isHidden: _isHidden,
@@ -90,7 +144,8 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.only(
+                          top: 5, left: 10, right: 10, bottom: 10),
                       child: ConfirmPasswordField(
                         controller: _confirmPasswordController,
                         actualPassword: _newPasswordController.text,
@@ -104,44 +159,53 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.only(
+                          top: 5, left: 10, right: 10, bottom: 10),
                       child: SizedBox(
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            var validate = _formKey.currentState?.validate();
-                            if (validate == true) {
-                              // _onResetButtonClick();
-                            }
-                          },
+                          onPressed: () => _onResetButtonPressed(),
                           child: const Text('RESET PASSWORD'),
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, bottom: 5),
                       child: SizedBox(
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context,'/auth/forgot-password');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordPage(),
+                              ),
+                            );
                           },
-                          child: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold),),
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 255, 255, 255),
-                            onPrimary: const Color.fromARGB(255, 0, 174, 255),
+                            foregroundColor:
+                                const Color.fromARGB(255, 0, 174, 255),
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 255, 255),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
-                              side: const BorderSide(width:2, color: Color.fromARGB(255, 0, 174, 255)),
+                              side: const BorderSide(
+                                  width: 2,
+                                  color: Color.fromARGB(255, 0, 174, 255)),
                             ),
+                          ),
+                          child: const Text(
+                            'CANCEL',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                     ),
-
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                       height: 20,
                       thickness: 1,
@@ -154,10 +218,14 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () =>
-                              {
-                                Navigator.pushNamed(context, "/auth/login")
-                              },
+                          onPressed: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            )
+                          },
                           child: const Text('LOGIN'),
                         ),
                       ),
@@ -169,7 +237,12 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => {
-                            Navigator.pushNamed(context,'/auth/register')
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterPage(),
+                              ),
+                            )
                           },
                           child: const Text('REGISTER'),
                         ),

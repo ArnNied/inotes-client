@@ -40,4 +40,30 @@ class Auth {
       },
     );
   }
+
+  Future<http.Response> forgotPassword(String email) async {
+    return await Requests().post(
+      endpoint: "/auth/reset-password",
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json",
+      },
+      body: jsonEncode({
+        "email": email,
+      }),
+    );
+  }
+
+  Future<http.Response> confirmForgotPassword(
+      String token, String newPassword) async {
+    return await Requests().post(
+      endpoint: "/auth/reset-password/confirm",
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json",
+      },
+      body: jsonEncode({
+        "token": token,
+        "newPassword": newPassword,
+      }),
+    );
+  }
 }

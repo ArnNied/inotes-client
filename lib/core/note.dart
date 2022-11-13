@@ -4,7 +4,7 @@ import 'requests.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Auth {
+class Note {
   Future<http.Response> getNote(String session, String noteId) async {
     return await Requests().get(
       endpoint: "/note/$noteId",
@@ -49,7 +49,7 @@ class Auth {
     String title,
     String body,
   ) async {
-    return await Requests().put(
+    return await Requests().patch(
       endpoint: "/note/$noteId",
       headers: {
         HttpHeaders.contentTypeHeader: "application/json",

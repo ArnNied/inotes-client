@@ -4,14 +4,14 @@ import 'package:inotes/components/account/change_username.dart';
 import 'package:inotes/components/account/change_password.dart';
 import 'package:inotes/components/account/delete_account.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class MyAccountPage extends StatefulWidget {
+  const MyAccountPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MyAccountPage> createState() => _MyAccountPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _MyAccountPageState extends State<MyAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

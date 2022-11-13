@@ -36,3 +36,34 @@ String? confirmPasswordValidator(String? confirmPassword, String password) {
 
   return null;
 }
+
+String? noteTitleValidator(String? noteTitle) {
+  if (noteTitle == null || noteTitle.isEmpty) {
+    return 'Title cannot be empty';
+  }
+  if (noteTitle.length > 255) {
+    return 'Title cannot be longer than 255 characters';
+  }
+
+  return null;
+}
+
+String? noteBodyValidator(String? noteBody) {
+  if (noteBody == null || noteBody.isEmpty) {
+    return 'Body cannot be empty';
+  }
+
+  return null;
+}
+
+String? resetCodeValidator(String? token) {
+  if (token!.isEmpty) {
+    return 'Reset code cannot be empty';
+  }
+
+  if (token.length != 6) {
+    return 'Invalid reset code';
+  }
+
+  return null;
+}
