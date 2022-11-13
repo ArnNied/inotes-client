@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:inotes/components/shared/error_box.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
 import 'package:inotes/core/validators.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/auth/forgot_password.dart';
 import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/auth/register.dart';
@@ -23,10 +23,9 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
   bool _isHidden = true;
   String error = "";
 
-  final TextEditingController _resetCodeController = TextEditingController();
-  final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final _resetCodeController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   void _onResetButtonPressed() async {
     if (_formKey.currentState!.validate()) {
@@ -34,17 +33,17 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
       final NavigatorState navigator = Navigator.of(context);
       final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
 
-      final Response req = await Auth().confirmForgotPassword(
+      final req = await Auth().confirmForgotPassword(
         _resetCodeController.text,
         _newPasswordController.text,
       );
 
-      final res = jsonDecode(req.body);
+      final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 200) {
         messenger.showSnackBar(
           SnackBar(
-            content: Text(res["message"]),
+            content: Text(res.message),
           ),
         );
         navigator.pushReplacement(
@@ -55,7 +54,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
       } else if (req.statusCode == 400 || req.statusCode == 404) {
         // show error message
         setState(() {
-          error = res["message"];
+          error = res.message;
         });
       } else {
         // throw an exception

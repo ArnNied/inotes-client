@@ -5,6 +5,7 @@ import 'package:inotes/components/shared/appbar.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/model/note.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/note/edit.dart';
 import 'package:inotes/pages/note/list.dart';
 
@@ -41,12 +42,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 
     final String? session = await Session.get();
     final req = await Note().deleteNote(session!, widget.note.id);
-    final res = await jsonDecode(req.body);
+    final res = ResponseModel.fromJson(jsonDecode(req.body));
 
     if (req.statusCode == 200) {
       messenger.showSnackBar(
         SnackBar(
-          content: Text(res['message']),
+          content: Text(res.message),
         ),
       );
 
@@ -56,7 +57,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     } else {
       messenger.showSnackBar(
         SnackBar(
-          content: Text('Failed to delete note: ${res['message']}'),
+          content: Text('Failed to delete note: ${res.message}'),
         ),
       );
     }

@@ -5,6 +5,7 @@ import 'package:inotes/components/shared/error_box.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
 import 'package:inotes/core/session.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/auth/forgot_password.dart';
 import 'package:inotes/pages/auth/register.dart';
 import 'package:inotes/pages/note/list.dart';
@@ -22,8 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   void _onLoginButtonClick() async {
     if (_formKey.currentState!.validate()) {
@@ -36,14 +37,14 @@ class _LoginPageState extends State<LoginPage> {
         _passwordController.text,
       );
 
-      final res = jsonDecode(req.body);
+      final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 200) {
-        Session.set(res["data"]["session"]);
+        Session.set(res.data["session"]);
 
         messenger.showSnackBar(
           SnackBar(
-            content: Text(res["message"]),
+            content: Text(res.message),
           ),
         );
 
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       } else if (req.statusCode == 400) {
         // show error message
         setState(() {
-          error = res["message"];
+          error = res.message;
         });
       } else {
         // throw an exception

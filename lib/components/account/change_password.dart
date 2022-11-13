@@ -12,10 +12,9 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
 
-  final TextEditingController _oldPasswordController = TextEditingController();
-  final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmNewPasswordController =
-      TextEditingController();
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _confirmNewPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

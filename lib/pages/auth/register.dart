@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/error_box.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -19,10 +20,9 @@ class _RegisterPageState extends State<RegisterPage> {
   String error = "";
   bool _isHidden = true;
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   void _onRegisterButtonClick() async {
     if (_formKey.currentState!.validate()) {
@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _passwordController.text,
       );
 
-      final res = jsonDecode(req.body);
+      final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 201) {
         messenger.showSnackBar(
@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
       } else if (req.statusCode == 400) {
         // show error message
         setState(() {
-          error = res["message"];
+          error = res.message;
         });
       } else {
         // throw an exception

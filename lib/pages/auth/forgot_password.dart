@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/auth/register.dart';
-import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -18,7 +18,7 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
+  final _emailController = TextEditingController();
 
   void _onResetButtonPressed() async {
     final NavigatorState navigator = Navigator.of(context);
@@ -26,7 +26,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     if (_formKey.currentState!.validate()) {
       final req = await Auth().forgotPassword(_emailController.text);
-      final res = await jsonDecode(req.body);
+      final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 200) {
         messenger.showSnackBar(
@@ -42,7 +42,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         messenger.showSnackBar(
           SnackBar(
             content:
-                Text('Failed to send password reset email: ${res['message']}'),
+                Text('Failed to send password reset email: ${res.message}'),
           ),
         );
       }

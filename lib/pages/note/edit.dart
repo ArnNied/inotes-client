@@ -8,6 +8,7 @@ import 'package:inotes/core/note.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/note.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/note/list.dart';
 
 class NoteEditPage extends StatefulWidget {
@@ -23,8 +24,8 @@ class _NoteEditPageState extends State<NoteEditPage> {
   final _formKey = GlobalKey<FormState>();
   String error = "";
 
-  final TextEditingController _noteTitleController = TextEditingController();
-  final TextEditingController _noteBodyController = TextEditingController();
+  final _noteTitleController = TextEditingController();
+  final _noteBodyController = TextEditingController();
 
   void _onUpdateNoteButtonPressed() async {
     if (_formKey.currentState!.validate()) {
@@ -38,12 +39,12 @@ class _NoteEditPageState extends State<NoteEditPage> {
         _noteTitleController.text,
         _noteBodyController.text,
       );
-      final res = await jsonDecode(req.body);
+      final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 200) {
         messenger.showSnackBar(
           SnackBar(
-            content: Text(res['message']),
+            content: Text(res.message),
           ),
         );
 
@@ -52,7 +53,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
         ));
       } else {
         setState(() {
-          error = res['message'];
+          error = res.message;
         });
       }
     }
