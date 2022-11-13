@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
+import 'package:inotes/pages/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -153,11 +154,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    '/auth/login',
-                                  );
-                                },
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),

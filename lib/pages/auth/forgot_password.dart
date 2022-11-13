@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/auth/register.dart';
+import 'package:inotes/pages/auth/confirm_forgot_password.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -72,7 +73,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             if (validate == true) {
                               // _onResetButtonClick();
                               // print(validate);
-                              Navigator.pushNamed(context, "/auth/reset/confirm");
+                              // Navigator.pushNamed(context, "/auth/reset/confirm");
+                              Navigator.push(
+                                context, MaterialPageRoute(
+                                  builder: (context) => const ConfirmForgotPasswordPage()
+                                )
+                              );
                             }
                           },
                           child: const Text('RESET'),
