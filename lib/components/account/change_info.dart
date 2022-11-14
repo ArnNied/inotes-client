@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
+import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/response.dart';
 import 'package:inotes/model/user.dart';
 
@@ -41,9 +42,9 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
       final String? session = await Session.get();
       final req = await User().updateInfo(
         session!,
+        _emailController.text,
         _firstNameController.text,
         _lastNameController.text,
-        _emailController.text,
       );
       final res = ResponseModel.fromJson(jsonDecode(req.body));
 
@@ -108,14 +109,8 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
                         child: CustomTextField(
                           controller: _lastNameController,
                           label: 'Last Name',
-                          validator: (thisFirstName) {
-                            if (_lastNameController.text.isNotEmpty ||
-                                _firstNameController.text.isEmpty) {
-                              return "Tidak boleh hanya mengisi Nama Belakang";
-                            }
-
-                            return null;
-                          },
+                          validator: (lastName) => lastNameValidator(
+                              lastName, _firstNameController.text),
                           prefixIcon: const Icon(Icons.person),
                         )),
                   ),

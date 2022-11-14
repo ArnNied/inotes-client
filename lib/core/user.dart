@@ -21,7 +21,7 @@ class User {
     String firstName,
     String lastName,
   ) async {
-    return await Requests().put(
+    return await Requests().patch(
       endpoint: "/user",
       headers: {
         HttpHeaders.contentTypeHeader: "application/json",

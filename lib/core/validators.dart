@@ -67,3 +67,11 @@ String? resetCodeValidator(String? token) {
 
   return null;
 }
+
+String? lastNameValidator(String? lastName, String firstName) {
+  if (lastName!.isNotEmpty && firstName.isEmpty) {
+    return 'Fill out the first name field first';
+  }
+
+  return null;
+}

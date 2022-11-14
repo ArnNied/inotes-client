@@ -49,7 +49,7 @@ class Note {
     String title,
     String body,
   ) async {
-    return await Requests().patch(
+    return await Requests().put(
       endpoint: "/note/$noteId",
       headers: {
         HttpHeaders.contentTypeHeader: "application/json",
