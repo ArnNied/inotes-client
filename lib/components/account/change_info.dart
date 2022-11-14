@@ -1,19 +1,73 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/session.dart';
+import 'package:inotes/core/user.dart';
+import 'package:inotes/model/response.dart';
+import 'package:inotes/model/user.dart';
 
-class ChangeUsernameSection extends StatefulWidget {
-  const ChangeUsernameSection({super.key});
+class ChangeInfoSection extends StatefulWidget {
+  const ChangeInfoSection({super.key});
 
   @override
-  State<ChangeUsernameSection> createState() => _ChangeUsernameSectionState();
+  State<ChangeInfoSection> createState() => _ChangeInfoSectionState();
 }
 
-class _ChangeUsernameSectionState extends State<ChangeUsernameSection> {
+class _ChangeInfoSectionState extends State<ChangeInfoSection> {
   final _formKey = GlobalKey<FormState>();
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
+
+  void _fetchUserInfo() async {
+    final String? session = await Session.get();
+    final req = await User().getInfo(session!);
+    final res = ResponseModel.fromJson(jsonDecode(req.body));
+    final user = UserModel.fromJson(res.data);
+
+    if (req.statusCode == 200) {
+      _firstNameController.text = user.firstName ?? "";
+      _lastNameController.text = user.lastName ?? "";
+      _emailController.text = user.email;
+    }
+  }
+
+  void _onUpdateInfoButtonPressed() async {
+    if (_formKey.currentState!.validate()) {
+      final messenger = ScaffoldMessenger.of(context);
+
+      final String? session = await Session.get();
+      final req = await User().updateInfo(
+        session!,
+        _firstNameController.text,
+        _lastNameController.text,
+        _emailController.text,
+      );
+      final res = ResponseModel.fromJson(jsonDecode(req.body));
+
+      if (req.statusCode == 200) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res.message),
+          ),
+        );
+      } else {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res.message),
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +135,7 @@ class _ChangeUsernameSectionState extends State<ChangeUsernameSection> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  var validate = _formKey.currentState?.validate();
-                  if (validate == true) {
-                    // _onLoginButtonClick();
-                    print(validate);
-                  }
-                },
+                onPressed: _onUpdateInfoButtonPressed,
                 child: const Text("Update Basic Information"),
               ),
             ),

@@ -144,7 +144,7 @@ class _NoteListPageState extends State<NoteListPage> {
       ),
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _onFloatingButtonPressed(),
+        onPressed: _onFloatingButtonPressed,
         tooltip: 'Create Note',
         child: const Icon(Icons.add),
       ),

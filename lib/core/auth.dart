@@ -62,7 +62,7 @@ class Auth {
       },
       body: jsonEncode({
         "token": token,
-        "newPassword": newPassword,
+        "new_password": newPassword,
       }),
     );
   }

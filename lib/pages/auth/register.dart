@@ -17,7 +17,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  String error = "";
   bool _isHidden = true;
 
   final _emailController = TextEditingController();
@@ -27,8 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
   void _onRegisterButtonClick() async {
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
-      final NavigatorState navigator = Navigator.of(context);
-      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
 
       final req = await Auth().register(
         _emailController.text,
@@ -50,12 +49,15 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       } else if (req.statusCode == 400) {
         // show error message
-        setState(() {
-          error = res.message;
-        });
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res.message),
+          ),
+        );
       } else {
         // throw an exception
-        throw Exception("Unexpected status code: ${req.statusCode}");
+        throw Exception(
+            "Unexpected status code: ${req.statusCode} ${res.message}");
       }
     }
   }
@@ -70,9 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final errorDisplay =
-        error.isNotEmpty ? ErrorBox(error: error) : Container();
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       body: Center(
@@ -101,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    errorDisplay,
                     Container(
                       padding: const EdgeInsets.only(top: 5, bottom: 10),
                       child: EmailField(

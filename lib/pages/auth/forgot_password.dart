@@ -21,8 +21,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   void _onResetButtonPressed() async {
-    final NavigatorState navigator = Navigator.of(context);
-    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
 
     if (_formKey.currentState!.validate()) {
       final req = await Auth().forgotPassword(_emailController.text);
@@ -107,7 +107,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => _onResetButtonPressed(),
+                          onPressed: _onResetButtonPressed,
                           child: const Text('RESET'),
                         ),
                       ),

@@ -37,8 +37,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   }
 
   void _onMenuItemDeletePressed() async {
-    final NavigatorState navigator = Navigator.of(context);
-    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
 
     final String? session = await Session.get();
     final req = await Note().deleteNote(session!, widget.note.id);
@@ -69,7 +69,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       appBar: CustomAppBar(
         actions: <Widget>[
           PopupMenuButton(
-            // setState(() {});
             onSelected: (Menu menu) => _handlePopUpMenuOption(menu),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
               const PopupMenuItem<Menu>(

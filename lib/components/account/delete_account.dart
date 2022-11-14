@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:inotes/core/session.dart';
+import 'package:inotes/core/user.dart';
+import 'package:inotes/model/response.dart';
+import 'package:inotes/pages/auth/login.dart';
 
 class DeleteAccountSection extends StatefulWidget {
   const DeleteAccountSection({super.key});
@@ -8,6 +14,90 @@ class DeleteAccountSection extends StatefulWidget {
 }
 
 class _DeleteAccountSectionState extends State<DeleteAccountSection> {
+  void _onConfirmDeleteAccountButtonPressed() async {
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    final String? session = await Session.get();
+    final req = await User().deleteAccount(session!);
+    final res = ResponseModel.fromJson(jsonDecode(req.body));
+
+    if (req.statusCode == 200) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(res.message),
+        ),
+      );
+
+      navigator.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+        (route) => false,
+      );
+    } else {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(res.message),
+        ),
+      );
+    }
+  }
+
+  void warningDelete() {
+    AlertDialog alert = AlertDialog(
+      title: const Text("Are you Sure?",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+      content: const Text(
+          "This is the final step of your account deletion. This action is permanent and irreversible."),
+      actions: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(153, 255, 0, 0),
+                  ),
+                  child: const Text("CANCEL"),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _onConfirmDeleteAccountButtonPressed,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    side: const BorderSide(
+                        width: 2.0, color: Color.fromARGB(153, 255, 0, 0)),
+                    shadowColor: null,
+                  ),
+                  child: const Text(
+                    "CONFIRM",
+                    style: TextStyle(
+                        color: Color.fromARGB(153, 255, 0, 0),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,83 +125,14 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () => {warningDelete()},
-              child: const Text("DELETE MY ACCOUNT"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(153, 255, 0, 0),
               ),
+              child: const Text("DELETE MY ACCOUNT"),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  void warningDelete() {
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Are you Sure?",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-      content: const Text(
-          "This is the final step of your account deletion. This action is permanent and irreversible."),
-      actions: [
-        Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center, //Center Row contents horizontally,
-          crossAxisAlignment:
-              CrossAxisAlignment.center, //Center Row contents vertically,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: SizedBox(
-                  width: 150,
-                  child: ElevatedButton(
-                    child: const Text("CANCEL",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(153, 255, 0, 0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: SizedBox(
-                  width: 150,
-                  child: ElevatedButton(
-                    child: const Text("CONFIRM",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 255, 0, 0),
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                      side: const BorderSide(
-                          width: 2.0, color: Color.fromARGB(153, 255, 0, 0)),
-                      shadowColor: null,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }

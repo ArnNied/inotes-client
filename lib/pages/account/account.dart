@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
-import 'package:inotes/components/account/change_username.dart';
+import 'package:inotes/components/account/change_info.dart';
 import 'package:inotes/components/account/change_password.dart';
 import 'package:inotes/components/account/delete_account.dart';
 
@@ -16,14 +16,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const <Widget>[
-            ChangeUsernameSection(),
-            ChangePasswordSection(),
-            DeleteAccountSection(),
-          ],
-        ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
+        children: const [
+          ChangeInfoSection(),
+          ChangePasswordSection(),
+          DeleteAccountSection(),
+        ],
       ),
     );
   }

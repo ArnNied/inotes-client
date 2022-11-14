@@ -18,8 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String error = "";
-
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
 
@@ -29,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   void _onLoginButtonClick() async {
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
-      final NavigatorState navigator = Navigator.of(context);
-      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
 
       final req = await Auth().login(
         _emailController.text,
@@ -53,16 +51,16 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) => const NoteListPage(),
           ),
         );
-      } else if (req.statusCode == 400) {
+      } else if (req.statusCode == 400 || req.statusCode == 404) {
         // show error message
-        setState(() {
-          error = res.message;
-        });
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res.message),
+          ),
+        );
       } else {
         // throw an exception
-        setState(() {
-          error = "Unexpected status code: ${req.statusCode}";
-        });
+        throw Exception("Unexpected status code: ${req.statusCode}");
       }
     }
   }
@@ -76,10 +74,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Display error if there is one
-    final errorDisplay =
-        error.isNotEmpty ? ErrorBox(error: error) : Container();
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       body: Center(
@@ -108,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    errorDisplay,
                     Container(
                       padding: const EdgeInsets.only(top: 5, bottom: 10),
                       child: EmailField(

@@ -21,7 +21,6 @@ class ConfirmForgotPasswordPage extends StatefulWidget {
 class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
-  String error = "";
 
   final _resetCodeController = TextEditingController();
   final _newPasswordController = TextEditingController();
@@ -30,8 +29,8 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
   void _onResetButtonPressed() async {
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
-      final NavigatorState navigator = Navigator.of(context);
-      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
 
       final req = await Auth().confirmForgotPassword(
         _resetCodeController.text,
@@ -53,9 +52,11 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
         );
       } else if (req.statusCode == 400 || req.statusCode == 404) {
         // show error message
-        setState(() {
-          error = res.message;
-        });
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res.message),
+          ),
+        );
       } else {
         // throw an exception
         throw Exception("Unexpected status code: ${req.statusCode}");
@@ -73,8 +74,6 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final errorDisplay =
-        error.isNotEmpty ? ErrorBox(error: error) : Container();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 25, 0, 92),
       body: Center(
@@ -103,7 +102,6 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                         ),
                       ),
                     ),
-                    errorDisplay,
                     Container(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: const Text(
@@ -164,7 +162,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => _onResetButtonPressed(),
+                          onPressed: _onResetButtonPressed,
                           child: const Text('RESET PASSWORD'),
                         ),
                       ),

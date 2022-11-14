@@ -19,15 +19,14 @@ class NoteCreatePage extends StatefulWidget {
 
 class _NoteCreatePageState extends State<NoteCreatePage> {
   final _formKey = GlobalKey<FormState>();
-  String error = "";
 
   final _noteTitleController = TextEditingController();
   final _noteBodyController = TextEditingController();
 
   void _onAddNoteButtonPressed() async {
     if (_formKey.currentState!.validate()) {
-      final NavigatorState navigator = Navigator.of(context);
-      final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
 
       final String? session = await Session.get();
       final req = await Note().createNote(
@@ -49,9 +48,11 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
           ),
         );
       } else {
-        setState(() {
-          error = res.message;
-        });
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(res.message),
+          ),
+        );
       }
     }
   }
@@ -65,9 +66,6 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    final errorDisplay =
-        error.isNotEmpty ? ErrorBox(error: error) : Container();
-
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Form(
@@ -90,7 +88,6 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
                 ),
               ),
             ),
-            errorDisplay,
             Container(
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: CustomTextField(
@@ -116,7 +113,7 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
         child: SizedBox(
           height: 50,
           child: ElevatedButton(
-            onPressed: () => _onAddNoteButtonPressed(),
+            onPressed: _onAddNoteButtonPressed,
             child: const Text('Add Note'),
           ),
         ),

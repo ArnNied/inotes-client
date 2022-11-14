@@ -9,8 +9,8 @@ class User {
     return await Requests().get(
       endpoint: "/user",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
     );
   }
@@ -24,31 +24,31 @@ class User {
     return await Requests().put(
       endpoint: "/user",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
         "email": email,
-        "firstName": firstName,
-        "lastName": lastName,
+        "first_name": firstName,
+        "last_name": lastName,
       }),
     );
   }
 
   Future<http.Response> changePassword(
     String session,
-    String oldPassword,
+    String currentPassword,
     String newPassword,
   ) async {
     return await Requests().post(
       endpoint: "/user/change-password",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
-        "oldPassword": oldPassword,
-        "newPassword": newPassword,
+        "current_password": currentPassword,
+        "new_password": newPassword,
       }),
     );
   }
@@ -57,8 +57,8 @@ class User {
     return await Requests().delete(
       endpoint: "/user",
       headers: {
-        HttpHeaders.authorizationHeader: session,
         HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: session,
       },
     );
   }
