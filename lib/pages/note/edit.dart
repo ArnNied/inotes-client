@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
-import 'package:inotes/components/shared/error_box.dart';
+import 'package:inotes/components/shared/drawer.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/core/session.dart';

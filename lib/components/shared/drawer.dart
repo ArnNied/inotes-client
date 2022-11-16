@@ -1,14 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:inotes/core/session.dart';
+import 'package:inotes/core/user.dart';
+import 'package:inotes/model/response.dart';
 import 'package:inotes/model/user.dart';
 import 'package:inotes/pages/account/account.dart';
 import 'package:inotes/pages/auth/login.dart';
 
-class CustomDrawer extends StatelessWidget {
-  final UserModel user;
+class CustomDrawer extends StatefulWidget {
+  const CustomDrawer({super.key});
 
-  const CustomDrawer({super.key, required this.user});
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
 
-  void _onLogoutButtonPressed(BuildContext context) {
+class _CustomDrawerState extends State<CustomDrawer> {
+  late Future<UserModel> user;
+
+  Future<UserModel> _fetchUserInfo() async {
+    final String? session = await Session.get();
+    final req = await User().getInfo(session!);
+    final res = ResponseModel.fromJson(jsonDecode(req.body));
+
+    if (req.statusCode == 200) {
+      return UserModel.fromJson(res.data);
+    } else {
+      throw Exception('Failed to load user info');
+    }
+  }
+
+  void _onLogoutButtonPressed() {
+    Navigator.pop(context);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -17,7 +40,8 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  void _onMyAccountButtonPressed(BuildContext context) {
+  void _onMyAccountButtonPressed() {
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -26,7 +50,7 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  void _onAboutUsButtonPressed(BuildContext context) {
+  void _onAboutUsButtonPressed() {
     // showDialog(
     //   context: context,
     //   builder: (context) {
@@ -47,6 +71,12 @@ class CustomDrawer extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    user = _fetchUserInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -56,40 +86,68 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
             },
-            child: UserAccountsDrawerHeader(
-              arrowColor: const Color.fromARGB(255, 255, 255, 255),
-              accountName: Text(user.firstName != null && user.lastName != null
-                  ? '${user.firstName} ${user.lastName}'
-                  : "-"),
-              accountEmail: Text(user.email),
-              // currentAccountPicture: CircleAvatar(
-              //   backgroundImage: AssetImage(
-              //       'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
-              // ),
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/image/ubuntu-20.04-wallpaper.png'),
-                ), //atur dulu di pubspec.yaml
-              ),
-              // child: Text('Drawer Header'),
+            child: FutureBuilder(
+              future: user,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return UserAccountsDrawerHeader(
+                    arrowColor: const Color.fromARGB(255, 255, 255, 255),
+                    accountName: Text(snapshot.data?.firstName != null &&
+                            snapshot.data?.lastName != null
+                        ? '${snapshot.data?.firstName} ${snapshot.data?.lastName}'
+                        : "-"),
+                    accountEmail: Text(snapshot.data!.email),
+                    // currentAccountPicture: CircleAvatar(
+                    //   backgroundImage: AssetImage(
+                    //       'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
+                    // ),
+                    decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                            'assets/image/ubuntu-20.04-wallpaper.png'),
+                      ), //atur dulu di pubspec.yaml
+                    ),
+                    // child: Text('Drawer Header'),
+                  );
+                } else {
+                  return const UserAccountsDrawerHeader(
+                    arrowColor: const Color.fromARGB(255, 255, 255, 255),
+                    accountName: Text("-"),
+                    accountEmail: Text("-"),
+                    // currentAccountPicture: CircleAvatar(
+                    //   backgroundImage: AssetImage(
+                    //       'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
+                    // ),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                            'assets/image/ubuntu-20.04-wallpaper.png'),
+                      ), //atur dulu di pubspec.yaml
+                    ),
+                    // child: Text('Drawer Header'),
+                  );
+                }
+              },
             ),
           ),
           ListTile(
             trailing: const Icon(Icons.settings),
             title: const Text("My Account"),
-            onTap: () => _onMyAccountButtonPressed(context),
+            onTap: () => _onMyAccountButtonPressed(),
           ),
           ListTile(
             trailing: const Icon(Icons.info),
             title: const Text("About Us"),
-            onTap: () => _onAboutUsButtonPressed(context),
+            onTap: () => _onAboutUsButtonPressed(),
           ),
           ListTile(
             trailing: const Icon(Icons.logout),
             title: const Text("Logout"),
-            onTap: () => _onLogoutButtonPressed(context),
+            onTap: () => _onLogoutButtonPressed(),
           ),
         ],
       ),

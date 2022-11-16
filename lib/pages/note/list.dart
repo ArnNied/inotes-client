@@ -83,16 +83,7 @@ class _NoteListPageState extends State<NoteListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: FutureBuilder(
-        future: user,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return CustomDrawer(user: snapshot.data!);
-          } else {
-            return const SizedBox();
-          }
-        },
-      ),
+      drawer: const CustomDrawer(),
       appBar: const CustomAppBar(),
       body: FutureBuilder(
         future: notes,
