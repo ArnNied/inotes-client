@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
@@ -122,12 +123,9 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
               controller: _emailController,
             ),
             const SizedBox(height: 15),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _onUpdateInfoButtonPressed,
-                child: const Text("Update Basic Information"),
-              ),
+            ButtonBlue(
+              label: "Update Basic Information",
+              onPressed: _onUpdateInfoButtonPressed,
             ),
           ],
         ),

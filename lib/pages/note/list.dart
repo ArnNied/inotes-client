@@ -10,7 +10,6 @@ import 'package:inotes/core/note.dart';
 import 'package:inotes/model/note.dart';
 import 'package:inotes/model/response.dart';
 import 'package:inotes/model/user.dart';
-import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/note/create.dart';
 import 'package:inotes/pages/note/detail.dart';
 
@@ -145,7 +144,7 @@ class _NoteListPageState extends State<NoteListPage> {
           }
         },
       ),
-      backgroundColor: const Color.fromARGB(255, 25, 0, 92),
+      backgroundColor: const Color.fromARGB(255, 39, 29, 86),
       floatingActionButton: FloatingActionButton(
         onPressed: _onFloatingButtonPressed,
         tooltip: 'Create Note',

@@ -25,11 +25,11 @@ class CustomTextField extends TextFormField {
             contentPadding: const EdgeInsets.all(12),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                  color: Color.fromARGB(255, 0, 174, 255), width: 2.0),
+                  color: Color.fromARGB(255, 87, 154, 226), width: 2.0),
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                  color: Color.fromARGB(255, 0, 174, 255), width: 2.0),
+                  color: Color.fromARGB(255, 87, 154, 226), width: 2.0),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.red.shade500, width: 2.0),
@@ -76,7 +76,6 @@ class PasswordField extends CustomTextField {
             onTap: onTap,
             child: Icon(
               isHidden ? Icons.visibility : Icons.visibility_off,
-              // color: Color.fromARGB(255, 0, 174, 255),
             ),
           ),
         );

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
 import 'package:inotes/model/response.dart';
@@ -49,6 +50,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
+  void _onLoginButtonPressed() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
+  }
+
+  void _onRegisterButtonPressed() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const RegisterPage(),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -58,7 +75,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 25, 0, 92),
+      backgroundColor: const Color.fromARGB(255, 39, 29, 86),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +84,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               key: _formKey,
               child: Container(
                 width: 350,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(5),
@@ -81,37 +98,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 174, 255),
+                          color: Color.fromARGB(255, 87, 154, 226),
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: const Text(
-                        "We will reset your account's password and send you an email containing the new password. Please change your password after you log in",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color.fromARGB(255, 2, 2, 2),
-                        ),
+                    const Text(
+                      "We will reset your account's password and send you an email containing the new password. Please change your password after you log in",
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(255, 2, 2, 2),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: EmailField(
-                        controller: _emailController,
-                      ),
+                    const SizedBox(height: 20),
+                    EmailField(
+                      controller: _emailController,
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _onResetButtonPressed,
-                          child: const Text('RESET'),
-                        ),
-                      ),
+                    const SizedBox(height: 15),
+                    ButtonBlue(
+                      label: "RESET",
+                      onPressed: _onResetButtonPressed,
                     ),
+                    const SizedBox(height: 10),
                     const Divider(
                       color: Colors.black,
                       height: 20,
@@ -119,42 +126,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                              ),
-                            );
-                          },
-                          child: const Text('LOGIN'),
-                        ),
-                      ),
+                    const SizedBox(height: 10),
+                    ButtonBlue(
+                      label: "LOGIN",
+                      onPressed: _onLoginButtonPressed,
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterPage(),
-                              ),
-                            ),
-                          },
-                          child: const Text('REGISTER'),
-                        ),
-                      ),
-                    )
+                    const SizedBox(height: 10),
+                    ButtonBlue(
+                      label: "REGISTER",
+                      onPressed: _onRegisterButtonPressed,
+                    ),
                   ],
                 ),
               ),

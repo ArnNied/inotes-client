@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
@@ -60,32 +61,20 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(153, 255, 0, 0),
-                  ),
-                  child: const Text("CANCEL"),
+                child: ButtonRed(
+                  label: "CANCEL",
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: ElevatedButton(
+                child: ButtonRedInverted(
+                  label: "CONFIRM",
                   onPressed: _onConfirmDeleteAccountButtonPressed,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                    side: const BorderSide(
-                        width: 2.0, color: Color.fromARGB(153, 255, 0, 0)),
-                    shadowColor: null,
-                  ),
-                  child: const Text(
-                    "CONFIRM",
-                    style: TextStyle(
-                        color: Color.fromARGB(153, 255, 0, 0),
-                        fontWeight: FontWeight.bold),
-                  ),
                 ),
-              )
+              ),
             ],
           ),
         )
@@ -123,16 +112,7 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
             ),
           ),
           const SizedBox(height: 15),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(153, 255, 0, 0),
-              ),
-              onPressed: warningDelete,
-              child: const Text("DELETE MY ACCOUNT"),
-            ),
-          ),
+          ButtonRed(label: "DELETE MY ACCOUNT", onPressed: warningDelete),
         ],
       ),
     );

@@ -7,7 +7,6 @@ import 'package:inotes/core/session.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/model/note.dart';
 import 'package:inotes/model/response.dart';
-import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/note/edit.dart';
 import 'package:inotes/pages/note/list.dart';
 

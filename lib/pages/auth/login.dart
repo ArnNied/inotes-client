@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
 import 'package:inotes/core/session.dart';
@@ -64,6 +65,14 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _onForgotPasswordButtonPressed() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ForgotPasswordPage(),
+      ),
+    );
+  }
+
   void _onRegisterButtonPressed() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -82,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 25, 0, 92),
+      backgroundColor: const Color.fromARGB(255, 39, 29, 86),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Container(
                 width: 350,
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(5),
@@ -105,56 +114,37 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 174, 255),
+                          color: Color.fromARGB(255, 87, 154, 226),
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 5, bottom: 10),
-                      child: EmailField(
-                        controller: _emailController,
-                      ),
+                    EmailField(
+                      controller: _emailController,
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 5, bottom: 10),
-                      child: PasswordField(
-                        controller: _passwordController,
-                        isHidden: _isHidden, //hidden password
-                        onTap: () {
-                          setState(() {
-                            _isHidden = !_isHidden;
-                          });
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _onLoginButtonPressed();
-                          },
-                          child: const Text('LOGIN'),
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ForgotPasswordPage(),
-                          ),
-                        );
+                    const SizedBox(height: 15),
+                    PasswordField(
+                      controller: _passwordController,
+                      isHidden: _isHidden, //hidden password
+                      onTap: () {
+                        setState(() {
+                          _isHidden = !_isHidden;
+                        });
                       },
+                    ),
+                    const SizedBox(height: 15),
+                    ButtonBlue(
+                      label: "LOGIN",
+                      onPressed: _onLoginButtonPressed,
+                    ),
+                    const SizedBox(height: 10),
+                    TextButton(
+                      onPressed: _onForgotPasswordButtonPressed,
                       child: const Text(
                         "Forgot Password?",
                         style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 0, 174, 255)),
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 87, 154, 226),
+                        ),
                       ),
                     ),
                     const Divider(
@@ -164,17 +154,11 @@ class _LoginPageState extends State<LoginPage> {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _onRegisterButtonPressed,
-                          child: const Text('REGISTER'),
-                        ),
-                      ),
-                    )
+                    const SizedBox(height: 10),
+                    ButtonBlue(
+                      label: "REGISTER",
+                      onPressed: _onRegisterButtonPressed,
+                    ),
                   ],
                 ),
               ),

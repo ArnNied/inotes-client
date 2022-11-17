@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/response.dart';
-import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/note/list.dart';
 
 class NoteCreatePage extends StatefulWidget {
@@ -113,12 +113,10 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: SizedBox(
+        child: ButtonBlue(
+          label: "Add Note",
           height: 50,
-          child: ElevatedButton(
-            onPressed: _onAddNoteButtonPressed,
-            child: const Text('Add Note'),
-          ),
+          onPressed: _onAddNoteButtonPressed,
         ),
       ),
     );

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
 import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/response.dart';
-import 'package:inotes/pages/auth/forgot_password.dart';
 import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/auth/register.dart';
 
@@ -63,6 +63,30 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
     }
   }
 
+  void _onCancelButtonPressed() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
+  }
+
+  void _onLoginButtonPressed() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
+  }
+
+  void _onRegisterButtonPressed() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const RegisterPage(),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _resetCodeController.dispose();
@@ -74,7 +98,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 25, 0, 92),
+      backgroundColor: const Color.fromARGB(255, 39, 29, 86),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +107,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
               key: _formKey,
               child: Container(
                 width: 350,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(5),
@@ -97,110 +121,58 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 174, 255),
+                          color: Color.fromARGB(255, 87, 154, 226),
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: const Text(
-                        "Input the reset code that has been sent to your email address.",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color.fromARGB(255, 2, 2, 2),
-                        ),
+                    const Text(
+                      "Input the reset code that has been sent to your email address.",
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(255, 2, 2, 2),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        left: 10,
-                        right: 10,
-                        bottom: 5,
-                      ),
-                      child: CustomTextField(
-                        controller: _resetCodeController,
-                        label: 'Reset Code',
-                        validator: (token) => resetCodeValidator(token),
-                        prefixIcon: const Icon(Icons.lock_reset),
-                      ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: _resetCodeController,
+                      label: 'Reset Code',
+                      validator: (token) => resetCodeValidator(token),
+                      prefixIcon: const Icon(Icons.lock_reset),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 5),
-                      child: PasswordField(
-                        controller: _newPasswordController,
-                        isHidden: _isHidden,
-                        label: 'New Password',
-                        onTap: () {
-                          setState(() {
-                            _isHidden = !_isHidden;
-                          });
-                        },
-                      ),
+                    const SizedBox(height: 10),
+                    PasswordField(
+                      controller: _newPasswordController,
+                      isHidden: _isHidden,
+                      label: 'New Password',
+                      onTap: () {
+                        setState(() {
+                          _isHidden = !_isHidden;
+                        });
+                      },
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 10),
-                      child: ConfirmPasswordField(
-                        controller: _confirmPasswordController,
-                        actualPassword: _newPasswordController.text,
-                        isHidden: _isHidden,
-                        label: 'Confirm Password',
-                        onTap: () {
-                          setState(() {
-                            _isHidden = !_isHidden;
-                          });
-                        },
-                      ),
+                    const SizedBox(height: 10),
+                    ConfirmPasswordField(
+                      controller: _confirmPasswordController,
+                      actualPassword: _newPasswordController.text,
+                      isHidden: _isHidden,
+                      label: 'Confirm Password',
+                      onTap: () {
+                        setState(() {
+                          _isHidden = !_isHidden;
+                        });
+                      },
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5, left: 10, right: 10, bottom: 10),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _onResetButtonPressed,
-                          child: const Text('RESET PASSWORD'),
-                        ),
-                      ),
+                    const SizedBox(height: 10),
+                    ButtonBlue(
+                      label: "RESET PASSWORD",
+                      onPressed: _onResetButtonPressed,
                     ),
-                    Container(
-                      padding:
-                          const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordPage(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor:
-                                const Color.fromARGB(255, 0, 174, 255),
-                            backgroundColor:
-                                const Color.fromARGB(255, 255, 255, 255),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: const BorderSide(
-                                  width: 2,
-                                  color: Color.fromARGB(255, 0, 174, 255)),
-                            ),
-                          ),
-                          child: const Text(
-                            'CANCEL',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                    const SizedBox(height: 10),
+                    ButtonBlueInverted(
+                      label: "CANCEL",
+                      onPressed: _onCancelButtonPressed,
                     ),
+                    const SizedBox(height: 10),
                     const Divider(
                       color: Colors.black,
                       height: 20,
@@ -208,42 +180,16 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                              ),
-                            )
-                          },
-                          child: const Text('LOGIN'),
-                        ),
-                      ),
+                    const SizedBox(height: 10),
+                    ButtonBlue(
+                      label: "LOGIN",
+                      onPressed: _onLoginButtonPressed,
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterPage(),
-                              ),
-                            )
-                          },
-                          child: const Text('REGISTER'),
-                        ),
-                      ),
-                    )
+                    const SizedBox(height: 10),
+                    ButtonBlue(
+                      label: "REGISTER",
+                      onPressed: _onRegisterButtonPressed,
+                    ),
                   ],
                 ),
               ),

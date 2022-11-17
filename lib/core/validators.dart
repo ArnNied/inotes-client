@@ -1,6 +1,6 @@
 String? emailValidator(String? email) {
   if (email == null || email.isEmpty) {
-    return 'Email harus diisi';
+    return 'Email cannot be empty';
   }
   //validasi email
   Pattern pattern =
@@ -8,18 +8,18 @@ String? emailValidator(String? email) {
   RegExp regex = RegExp(pattern.toString());
 
   if (!regex.hasMatch(email)) {
-    return "Email tidak valid";
+    return "Invalid Email";
   }
   return null;
 }
 
 String? passwordValidator(String? password) {
   if (password == null || password.isEmpty) {
-    return 'Password harus diisi';
+    return 'Password cannot be empty';
   }
 
   if (password.length < 8) {
-    return 'Password minimal 8 karakter';
+    return 'Password must be at least 8 characters';
   }
 
   return null;
@@ -27,11 +27,11 @@ String? passwordValidator(String? password) {
 
 String? confirmPasswordValidator(String? confirmPassword, String password) {
   if (confirmPassword == null || confirmPassword.isEmpty) {
-    return 'Password harus diisi';
+    return 'Password cannot be empty';
   }
 
   if (confirmPassword != password) {
-    return 'Password tidak sama';
+    return 'Does not match password';
   }
 
   return null;

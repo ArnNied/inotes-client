@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
@@ -64,7 +65,7 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
             Container(
               alignment: Alignment.centerLeft,
               child: const Text(
-                "Basic Information",
+                "Change Password",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               ),
             ),
@@ -91,12 +92,9 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
               onTap: () => setState(() => _isHidden = !_isHidden),
             ),
             const SizedBox(height: 15),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _onChangePasswordButtonPressed,
-                child: const Text("Change Password"),
-              ),
+            ButtonBlue(
+              label: "Change Password",
+              onPressed: _onChangePasswordButtonPressed,
             ),
           ],
         ),

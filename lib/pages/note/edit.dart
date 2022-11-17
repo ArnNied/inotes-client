@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
+import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/note.dart';
@@ -125,12 +126,10 @@ class _NoteEditPageState extends State<NoteEditPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: SizedBox(
+        child: ButtonBlue(
+          label: "Update Note",
           height: 50,
-          child: ElevatedButton(
-            onPressed: _onUpdateNoteButtonPressed,
-            child: const Text('Update Note'),
-          ),
+          onPressed: _onUpdateNoteButtonPressed,
         ),
       ),
     );
