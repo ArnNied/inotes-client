@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
 import 'package:inotes/core/validators.dart';
@@ -23,6 +24,9 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
   final _emailController = TextEditingController();
 
   void _fetchUserInfo() async {
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
     final String? session = await Session.get();
     final req = await User().getInfo(session!);
     final res = ResponseModel.fromJson(jsonDecode(req.body));
@@ -32,11 +36,16 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
       _firstNameController.text = user.firstName ?? "";
       _lastNameController.text = user.lastName ?? "";
       _emailController.text = user.email;
+    } else if (req.statusCode == 401) {
+      clearSessionThenRedirectToLogin(navigator, messenger);
+    } else {
+      throw Exception("Error: ${res.message}");
     }
   }
 
   void _onUpdateInfoButtonPressed() async {
     if (_formKey.currentState!.validate()) {
+      final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
 
       final String? session = await Session.get();
@@ -54,6 +63,8 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
             content: Text(res.message),
           ),
         );
+      } else if (req.statusCode == 401) {
+        clearSessionThenRedirectToLogin(navigator, messenger);
       } else {
         messenger.showSnackBar(
           SnackBar(
@@ -65,13 +76,9 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _fetchUserInfo();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _fetchUserInfo();
+
     return Form(
       key: _formKey,
       child: Column(

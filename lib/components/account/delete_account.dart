@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
 import 'package:inotes/model/response.dart';
@@ -35,6 +36,8 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
         ),
         (route) => false,
       );
+    } else if (req.statusCode == 401) {
+      clearSessionThenRedirectToLogin(navigator, messenger);
     } else {
       messenger.showSnackBar(
         SnackBar(

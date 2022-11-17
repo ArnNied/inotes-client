@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
 import 'package:inotes/model/response.dart';
+import 'package:inotes/pages/auth/login.dart';
 
 class ChangePasswordSection extends StatefulWidget {
   const ChangePasswordSection({super.key});
@@ -23,6 +25,7 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
 
   void _onChangePasswordButtonPressed() async {
     if (_formKey.currentState!.validate()) {
+      final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
 
       final String? session = await Session.get();
@@ -40,6 +43,8 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
           ),
         );
         // navigator.pop();
+      } else if (req.statusCode == 401) {
+        clearSessionThenRedirectToLogin(navigator, messenger);
       } else {
         messenger.showSnackBar(
           SnackBar(

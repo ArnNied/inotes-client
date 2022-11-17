@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
-import 'package:inotes/components/shared/drawer.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/validators.dart';
@@ -47,9 +47,13 @@ class _NoteEditPageState extends State<NoteEditPage> {
           ),
         );
 
-        navigator.push(MaterialPageRoute(
-          builder: (context) => const NoteListPage(),
-        ));
+        navigator.push(
+          MaterialPageRoute(
+            builder: (context) => const NoteListPage(),
+          ),
+        );
+      } else if (req.statusCode == 401) {
+        clearSessionThenRedirectToLogin(navigator, messenger);
       } else {
         messenger.showSnackBar(
           SnackBar(
@@ -64,7 +68,6 @@ class _NoteEditPageState extends State<NoteEditPage> {
   void initState() {
     super.initState();
 
-    // Input field initial value
     _noteTitleController.text = widget.note.title;
     _noteBodyController.text = widget.note.body;
   }

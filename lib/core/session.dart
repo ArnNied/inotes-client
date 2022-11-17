@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Session {
   static Future<String?> get() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('session');
+    return prefs.getString('session') ?? "";
   }
 
   static Future<void> set(String session) async {

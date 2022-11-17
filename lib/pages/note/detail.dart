@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/model/note.dart';
 import 'package:inotes/model/response.dart';
+import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/note/edit.dart';
 import 'package:inotes/pages/note/list.dart';
 
@@ -52,13 +54,15 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       );
 
       navigator.push(
-        MaterialPageRoute(builder: (context) => const NoteListPage()),
+        MaterialPageRoute(
+          builder: (context) => const NoteListPage(),
+        ),
       );
+    } else if (req.statusCode == 401) {
+      clearSessionThenRedirectToLogin(navigator, messenger);
     } else {
       messenger.showSnackBar(
-        SnackBar(
-          content: Text('Failed to delete note: ${res.message}'),
-        ),
+        SnackBar(content: Text('Failed to delete note: ${res.message}')),
       );
     }
   }

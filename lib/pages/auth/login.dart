@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 200) {
-        Session.set(res.data["session"]);
+        await Session.set(res.data["session"]);
 
         messenger.showSnackBar(
           SnackBar(

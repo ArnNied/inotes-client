@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/appbar.dart';
 import 'package:inotes/components/shared/textfield.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/note.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/response.dart';
+import 'package:inotes/pages/auth/login.dart';
 import 'package:inotes/pages/note/list.dart';
 
 class NoteCreatePage extends StatefulWidget {
@@ -46,6 +48,8 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
             builder: (context) => const NoteListPage(),
           ),
         );
+      } else if (req.statusCode == 401) {
+        clearSessionThenRedirectToLogin(navigator, messenger);
       } else {
         messenger.showSnackBar(
           SnackBar(

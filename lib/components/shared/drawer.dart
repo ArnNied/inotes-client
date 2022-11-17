@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
 import 'package:inotes/model/response.dart';
@@ -19,24 +20,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
   late Future<UserModel> user;
 
   Future<UserModel> _fetchUserInfo() async {
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
     final String? session = await Session.get();
     final req = await User().getInfo(session!);
     final res = ResponseModel.fromJson(jsonDecode(req.body));
 
     if (req.statusCode == 200) {
       return UserModel.fromJson(res.data);
+    } else if (req.statusCode == 401) {
+      clearSessionThenRedirectToLogin(navigator, messenger);
+
+      return UserModel(email: "");
     } else {
       throw Exception('Failed to load user info');
     }
   }
 
-  void _onLogoutButtonPressed() {
-    Navigator.pop(context);
-    Navigator.pushReplacement(
-      context,
+  void _onLogoutButtonPressed() async {
+    final navigator = Navigator.of(context);
+
+    await Session.clear();
+
+    navigator.pop();
+    navigator.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const LoginPage(),
       ),
+      (route) => false,
     );
   }
 
@@ -50,34 +62,30 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  void _onAboutUsButtonPressed() {
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       title: const Text('About Us'),
-    //       content: const Text('iNotes is a simple note-taking app.'),
-    //       actions: <Widget>[
-    //         TextButton(
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //           child: const Text('OK'),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    user = _fetchUserInfo();
-  }
+  // void _onAboutUsButtonPressed() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text('About Us'),
+  //         content: const Text('iNotes is a simple note-taking app.'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
+    user = _fetchUserInfo();
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -139,11 +147,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
             title: const Text("My Account"),
             onTap: () => _onMyAccountButtonPressed(),
           ),
-          ListTile(
-            trailing: const Icon(Icons.info),
-            title: const Text("About Us"),
-            onTap: () => _onAboutUsButtonPressed(),
-          ),
+          // ListTile(
+          //   trailing: const Icon(Icons.info),
+          //   title: const Text("About Us"),
+          //   onTap: () => _onAboutUsButtonPressed(),
+          // ),
           ListTile(
             trailing: const Icon(Icons.logout),
             title: const Text("Logout"),
