@@ -81,68 +81,56 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
 
     return Form(
       key: _formKey,
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(top: 15, bottom: 15, left: 10),
-            child: const Align(
-              alignment: Alignment.topLeft,
-              child: Text("Basic Information",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                "Basic Information",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+              ),
             ),
-          ),
-          Container(
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  width: null,
-                  child: Expanded(
-                    child: Container(
-                        padding: const EdgeInsets.only(right: 10, left: 10),
-                        child: CustomTextField(
-                          controller: _firstNameController,
-                          label: 'First Name',
-                          validator: null,
-                          prefixIcon: const Icon(Icons.person),
-                        )),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomTextField(
+                    controller: _firstNameController,
+                    label: "First Name",
+                    prefixIcon: const Icon(Icons.person),
+                    validator: null,
                   ),
                 ),
-                Container(
-                  width: null,
-                  child: Expanded(
-                    child: Container(
-                        padding: const EdgeInsets.only(right: 10, left: 10),
-                        child: CustomTextField(
-                          controller: _lastNameController,
-                          label: 'Last Name',
-                          validator: (lastName) => lastNameValidator(
-                              lastName, _firstNameController.text),
-                          prefixIcon: const Icon(Icons.person),
-                        )),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: CustomTextField(
+                    controller: _firstNameController,
+                    label: "Last Name",
+                    prefixIcon: const Icon(Icons.person),
+                    validator: (lastName) => lastNameValidator(
+                      lastName,
+                      _firstNameController.text,
+                    ),
                   ),
-                ),
+                )
               ],
             ),
-          ),
-          Container(
-            width: null,
-            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: EmailField(
+            const SizedBox(height: 15),
+            EmailField(
               controller: _emailController,
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: SizedBox(
+            const SizedBox(height: 15),
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _onUpdateInfoButtonPressed,
                 child: const Text("Update Basic Information"),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -103,39 +103,38 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.only(top: 30, bottom: 15, left: 10),
-          child: const Align(
-            alignment: Alignment.topLeft,
-            child: Text("Account Deletion",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: const Text(
+              "Account Deletion",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-          child: const Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-                "By clicking this button you acknowledged that every single data concerning you (this includes notes, email, password, and full name) will be deleted permanently and cannot be reversed.",
-                style: TextStyle(fontSize: 15)),
+          const SizedBox(height: 15),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: const Text(
+              "By clicking this button you acknowledged that every single data concerning you (this includes notes, email, password, and full name) will be deleted permanently and cannot be reversed.",
+              style: TextStyle(fontSize: 15),
+            ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-          child: SizedBox(
+          const SizedBox(height: 15),
+          SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => {warningDelete()},
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(153, 255, 0, 0),
               ),
+              onPressed: warningDelete,
               child: const Text("DELETE MY ACCOUNT"),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

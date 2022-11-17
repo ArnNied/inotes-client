@@ -6,7 +6,6 @@ import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
 import 'package:inotes/model/response.dart';
-import 'package:inotes/pages/auth/login.dart';
 
 class ChangePasswordSection extends StatefulWidget {
   const ChangePasswordSection({super.key});
@@ -42,7 +41,6 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
             content: Text(res.message),
           ),
         );
-        // navigator.pop();
       } else if (req.statusCode == 401) {
         clearSessionThenRedirectToLogin(navigator, messenger);
       } else {
@@ -59,74 +57,49 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(top: 30, bottom: 15, left: 10),
-            child: const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Change Password",
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                "Basic Information",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               ),
             ),
-          ),
-          Container(
-            width: null,
-            padding: const EdgeInsets.only(right: 10, left: 10, bottom: 5),
-            child: PasswordField(
+            const SizedBox(height: 20),
+            PasswordField(
               controller: _currentPasswordController,
               label: "Current Password",
               isHidden: _isHidden,
-              onTap: () {
-                setState(() {
-                  _isHidden = !_isHidden;
-                });
-              },
+              onTap: () => setState(() => _isHidden = !_isHidden),
             ),
-          ),
-          Container(
-            width: null,
-            padding:
-                const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 5),
-            child: PasswordField(
+            const SizedBox(height: 15),
+            PasswordField(
               controller: _newPasswordController,
               label: "New Password",
               isHidden: _isHidden,
-              onTap: () {
-                setState(() {
-                  _isHidden = !_isHidden;
-                });
-              },
+              onTap: () => setState(() => _isHidden = !_isHidden),
             ),
-          ),
-          Container(
-            width: null,
-            padding:
-                const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 5),
-            child: ConfirmPasswordField(
+            const SizedBox(height: 15),
+            ConfirmPasswordField(
               controller: _confirmNewPasswordController,
               label: "Confirm New Password",
               isHidden: _isHidden,
-              actualPassword: _newPasswordController.text,
-              onTap: () {
-                setState(() {
-                  _isHidden = !_isHidden;
-                });
-              },
+              actualPassword: _newPasswordController.value.text,
+              onTap: () => setState(() => _isHidden = !_isHidden),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: SizedBox(
+            const SizedBox(height: 15),
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _onChangePasswordButtonPressed,
                 child: const Text("Change Password"),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
