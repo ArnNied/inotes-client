@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _onLoginButtonClick() async {
+  void _onLoginButtonPressed() async {
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
       final navigator = Navigator.of(context);
@@ -62,6 +62,14 @@ class _LoginPageState extends State<LoginPage> {
         throw Exception("Unexpected status code: ${req.statusCode}");
       }
     }
+  }
+
+  void _onRegisterButtonPressed() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const RegisterPage(),
+      ),
+    );
   }
 
   @override
@@ -126,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            _onLoginButtonClick();
+                            _onLoginButtonPressed();
                           },
                           child: const Text('LOGIN'),
                         ),
@@ -162,14 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 30,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterPage(),
-                              ),
-                            ),
-                          },
+                          onPressed: _onRegisterButtonPressed,
                           child: const Text('REGISTER'),
                         ),
                       ),

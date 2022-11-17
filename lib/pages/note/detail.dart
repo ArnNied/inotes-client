@@ -67,6 +67,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
   }
 
+  String _formatDate(int ms) {
+    final dt = DateTime.fromMillisecondsSinceEpoch(ms * 1000);
+
+    return dt.toString().split('.').first;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,23 +94,27 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         ],
       ),
       body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: Text(
-              widget.note.title,
-              style: const TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
+          Text(
+            widget.note.title,
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: Text(
-              widget.note.body,
-              style: const TextStyle(fontSize: 15),
+          const SizedBox(height: 5),
+          Text(
+            "Last updated: ${_formatDate(widget.note.lastUpdated)}",
+            style: const TextStyle(
+              fontSize: 14,
+              fontStyle: FontStyle.italic,
             ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            widget.note.body,
+            style: const TextStyle(fontSize: 15),
           ),
         ],
       ),
