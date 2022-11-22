@@ -20,3 +20,9 @@ void clearSessionThenRedirectToLogin(
     (route) => false,
   );
 }
+
+String formatDate(int unixTimestamp) {
+  final dt = DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
+
+  return dt.toString().split('.').first;
+}

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:inotes/core/auth.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
@@ -40,8 +42,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   void _onLogoutButtonPressed() async {
     final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    final String? session = await Session.get();
+    final req = await Auth().logout(session!);
+    final res = ResponseModel.fromJson(jsonDecode(req.body));
 
     await Session.clear();
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(res.message),
+        backgroundColor: Colors.green,
+      ),
+    );
 
     navigator.pop();
     navigator.pushAndRemoveUntil(
@@ -53,9 +67,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   void _onMyAccountButtonPressed() {
-    Navigator.pop(context);
-    Navigator.push(
-      context,
+    final navigator = Navigator.of(context);
+    navigator.pop();
+    navigator.push(
       MaterialPageRoute(
         builder: (context) => const MyAccountPage(),
       ),
@@ -105,35 +119,33 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ? '${snapshot.data?.firstName} ${snapshot.data?.lastName}'
                         : "-"),
                     accountEmail: Text(snapshot.data!.email),
-                    // currentAccountPicture: CircleAvatar(
-                    //   backgroundImage: AssetImage(
-                    //       'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
-                    // ),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.blue,
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(
-                            'assets/image/ubuntu-20.04-wallpaper.png'),
+                        image: const AssetImage('assets/image/drawer.jpg'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.grey.shade500,
+                          BlendMode.multiply,
+                        ),
                       ), //atur dulu di pubspec.yaml
                     ),
                     // child: Text('Drawer Header'),
                   );
                 } else {
-                  return const UserAccountsDrawerHeader(
+                  return UserAccountsDrawerHeader(
                     arrowColor: const Color.fromARGB(255, 255, 255, 255),
-                    accountName: Text("-"),
-                    accountEmail: Text("-"),
-                    // currentAccountPicture: CircleAvatar(
-                    //   backgroundImage: AssetImage(
-                    //       'assets/image/ricardo.jpg'), //atur dulu di pubspec.yaml
-                    // ),
+                    accountName: const Text("-"),
+                    accountEmail: const Text("-"),
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(
-                            'assets/image/ubuntu-20.04-wallpaper.png'),
+                        image: const AssetImage('assets/image/drawer.jpg'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.grey.shade500,
+                          BlendMode.multiply,
+                        ),
                       ), //atur dulu di pubspec.yaml
                     ),
                     // child: Text('Drawer Header'),
@@ -145,7 +157,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ListTile(
             trailing: const Icon(Icons.settings),
             title: const Text("My Account"),
-            onTap: () => _onMyAccountButtonPressed(),
+            onTap: _onMyAccountButtonPressed,
           ),
           // ListTile(
           //   trailing: const Icon(Icons.info),
@@ -155,7 +167,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ListTile(
             trailing: const Icon(Icons.logout),
             title: const Text("Logout"),
-            onTap: () => _onLogoutButtonPressed(),
+            onTap: _onLogoutButtonPressed,
           ),
         ],
       ),

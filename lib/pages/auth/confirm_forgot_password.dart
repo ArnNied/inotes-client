@@ -23,7 +23,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
 
   final _resetCodeController = TextEditingController();
   final _newPasswordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _confirmNewPasswordController = TextEditingController();
 
   void _onResetButtonPressed() async {
     if (_formKey.currentState!.validate()) {
@@ -91,7 +91,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
   void dispose() {
     _resetCodeController.dispose();
     _newPasswordController.dispose();
-    _confirmPasswordController.dispose();
+    _confirmNewPasswordController.dispose();
     super.dispose();
   }
 
@@ -152,8 +152,12 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                     ),
                     const SizedBox(height: 10),
                     ConfirmPasswordField(
-                      controller: _confirmPasswordController,
-                      actualPassword: _newPasswordController.text,
+                      controller: _confirmNewPasswordController,
+                      validator: (confirmNewPassword) =>
+                          confirmPasswordValidator(
+                        confirmNewPassword,
+                        _newPasswordController.text,
+                      ),
                       isHidden: _isHidden,
                       label: 'Confirm Password',
                       onTap: () {

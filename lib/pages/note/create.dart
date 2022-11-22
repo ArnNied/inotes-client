@@ -43,7 +43,7 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
             content: Text(res.message),
           ),
         );
-        navigator.push(
+        navigator.pushReplacement(
           MaterialPageRoute(
             builder: (context) => const NoteListPage(),
           ),
@@ -74,13 +74,10 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(left: 20, right: 20),
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.only(
-                top: 20,
-                bottom: 15,
-              ),
+              padding: const EdgeInsets.all(20),
               child: const Center(
                 child: Text(
                   "Add Note",
@@ -91,23 +88,18 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              child: CustomTextField(
-                label: "Title",
-                controller: _noteTitleController,
-                validator: (title) => noteTitleValidator(title),
-              ),
+            CustomTextField(
+              label: "Title",
+              controller: _noteTitleController,
+              validator: (title) => noteTitleValidator(title),
             ),
-            Container(
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              child: CustomTextField(
-                label: "Body",
-                controller: _noteBodyController,
-                validator: (text) => noteBodyValidator(text),
-                minLines: 5,
-                maxLines: null,
-              ),
+            const SizedBox(height: 15),
+            CustomTextField(
+              label: "Body",
+              controller: _noteBodyController,
+              validator: (text) => noteBodyValidator(text),
+              minLines: 5,
+              maxLines: null,
             ),
           ],
         ),

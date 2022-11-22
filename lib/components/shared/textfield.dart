@@ -63,14 +63,13 @@ class PasswordField extends CustomTextField {
     required TextEditingController controller,
     required bool isHidden,
     required void Function() onTap,
-    String? Function(String?)? validator,
     String label = "Password",
   }) : super(
           key: key,
           label: label,
           controller: controller,
           obscureText: isHidden,
-          validator: validator ?? (password) => passwordValidator(password),
+          validator: (password) => passwordValidator(password),
           prefixIcon: const Icon(Icons.lock),
           suffixIcon: InkWell(
             onTap: onTap,
@@ -81,21 +80,26 @@ class PasswordField extends CustomTextField {
         );
 }
 
-class ConfirmPasswordField extends PasswordField {
+class ConfirmPasswordField extends CustomTextField {
   ConfirmPasswordField({
     Key? key,
     required TextEditingController controller,
+    required String? Function(String?)? validator,
     required bool isHidden,
     required void Function() onTap,
-    required String actualPassword,
     String label = "Confirm Password",
   }) : super(
           key: key,
           label: label,
           controller: controller,
-          validator: (password) =>
-              confirmPasswordValidator(password, actualPassword),
-          isHidden: isHidden,
-          onTap: onTap,
+          obscureText: isHidden,
+          validator: validator,
+          prefixIcon: const Icon(Icons.lock),
+          suffixIcon: InkWell(
+            onTap: onTap,
+            child: Icon(
+              isHidden ? Icons.visibility : Icons.visibility_off,
+            ),
+          ),
         );
 }

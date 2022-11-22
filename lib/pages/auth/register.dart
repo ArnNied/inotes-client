@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:inotes/components/shared/buttons.dart';
 import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/auth.dart';
+import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/response.dart';
 import 'package:inotes/pages/auth/login.dart';
 
@@ -116,7 +117,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 15),
                     ConfirmPasswordField(
                       controller: _confirmPasswordController,
-                      actualPassword: _passwordController.text,
+                      validator: (confirmPassword) => confirmPasswordValidator(
+                        confirmPassword,
+                        _passwordController.text,
+                      ),
                       isHidden: _isHidden,
                       onTap: () {
                         setState(() {
@@ -150,8 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushReplacement(
-                                    context,
+                                  Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                       builder: (context) => const LoginPage(),
                                     ),

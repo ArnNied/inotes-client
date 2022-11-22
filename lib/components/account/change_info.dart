@@ -107,7 +107,7 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: CustomTextField(
-                    controller: _firstNameController,
+                    controller: _lastNameController,
                     label: "Last Name",
                     prefixIcon: const Icon(Icons.person),
                     validator: (lastName) => lastNameValidator(

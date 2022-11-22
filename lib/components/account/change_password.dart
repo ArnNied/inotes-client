@@ -6,6 +6,7 @@ import 'package:inotes/components/shared/textfield.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
 import 'package:inotes/core/user.dart';
+import 'package:inotes/core/validators.dart';
 import 'package:inotes/model/response.dart';
 
 class ChangePasswordSection extends StatefulWidget {
@@ -88,7 +89,10 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
               controller: _confirmNewPasswordController,
               label: "Confirm New Password",
               isHidden: _isHidden,
-              actualPassword: _newPasswordController.value.text,
+              validator: (confirmNewPassword) => confirmPasswordValidator(
+                confirmNewPassword,
+                _newPasswordController.text,
+              ),
               onTap: () => setState(() => _isHidden = !_isHidden),
             ),
             const SizedBox(height: 15),

@@ -22,10 +22,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   void _onResetButtonPressed() async {
-    final navigator = Navigator.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-
     if (_formKey.currentState!.validate()) {
+      final navigator = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
+
       final req = await Auth().forgotPassword(_emailController.text);
       final res = ResponseModel.fromJson(jsonDecode(req.body));
 
@@ -36,9 +36,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         );
 
-        navigator.push(MaterialPageRoute(
-          builder: (context) => const ConfirmForgotPasswordPage(),
-        ));
+        navigator.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const ConfirmForgotPasswordPage(),
+          ),
+        );
       } else {
         messenger.showSnackBar(
           SnackBar(

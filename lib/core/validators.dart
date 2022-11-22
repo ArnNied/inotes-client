@@ -31,7 +31,7 @@ String? confirmPasswordValidator(String? confirmPassword, String password) {
   }
 
   if (confirmPassword != password) {
-    return 'Does not match password';
+    return 'Password does not match';
   }
 
   return null;

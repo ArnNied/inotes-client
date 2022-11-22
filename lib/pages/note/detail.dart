@@ -31,9 +31,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   }
 
   void _onMenuItemEditPressed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NoteEditPage(note: widget.note)),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NoteEditPage(note: widget.note),
+      ),
     );
   }
 
@@ -66,12 +67,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
   }
 
-  String _formatDate(int ms) {
-    final dt = DateTime.fromMillisecondsSinceEpoch(ms * 1000);
-
-    return dt.toString().split('.').first;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,15 +97,16 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 5),
+          // const SizedBox(height: 5),
           Text(
-            "Last updated: ${_formatDate(widget.note.lastUpdated)}",
-            style: const TextStyle(
-              fontSize: 14,
+            "Last updated: ${formatDate(widget.note.lastUpdated)}",
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade500,
               fontStyle: FontStyle.italic,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Text(
             widget.note.body,
             style: const TextStyle(fontSize: 15),
