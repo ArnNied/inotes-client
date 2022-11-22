@@ -41,6 +41,7 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.green,
           ),
         );
         navigator.pushReplacement(
@@ -54,6 +55,7 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.red,
           ),
         );
       }

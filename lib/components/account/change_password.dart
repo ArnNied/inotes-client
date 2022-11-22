@@ -41,6 +41,7 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.green,
           ),
         );
       } else if (req.statusCode == 401) {
@@ -49,6 +50,7 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.red,
           ),
         );
       }

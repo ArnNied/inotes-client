@@ -28,6 +28,7 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
       messenger.showSnackBar(
         SnackBar(
           content: Text(res.message),
+          backgroundColor: Colors.green,
         ),
       );
 
@@ -43,6 +44,7 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
       messenger.showSnackBar(
         SnackBar(
           content: Text(res.message),
+          backgroundColor: Colors.red,
         ),
       );
     }

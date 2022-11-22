@@ -45,6 +45,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.green,
           ),
         );
 
@@ -59,6 +60,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.red,
           ),
         );
       }

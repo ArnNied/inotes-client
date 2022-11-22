@@ -33,6 +33,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         messenger.showSnackBar(
           const SnackBar(
             content: Text('A reset code has been sent to your email'),
+            backgroundColor: Colors.green,
           ),
         );
 
@@ -46,6 +47,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           SnackBar(
             content:
                 Text('Failed to send password reset email: ${res.message}'),
+            backgroundColor: Colors.red,
           ),
         );
       }

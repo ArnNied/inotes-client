@@ -41,6 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
         messenger.showSnackBar(
           const SnackBar(
             content: Text("Registration successful! Please login."),
+            backgroundColor: Colors.green,
           ),
         );
         navigator.pushReplacement(
@@ -53,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.red,
           ),
         );
       } else {

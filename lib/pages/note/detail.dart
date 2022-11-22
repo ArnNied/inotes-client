@@ -50,6 +50,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       messenger.showSnackBar(
         SnackBar(
           content: Text(res.message),
+          backgroundColor: Colors.green,
         ),
       );
 
@@ -62,7 +63,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       clearSessionThenRedirectToLogin(navigator, messenger);
     } else {
       messenger.showSnackBar(
-        SnackBar(content: Text('Failed to delete note: ${res.message}')),
+        SnackBar(
+          content: Text('Failed to delete note: ${res.message}'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

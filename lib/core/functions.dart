@@ -10,6 +10,7 @@ void clearSessionThenRedirectToLogin(
   messenger.showSnackBar(
     const SnackBar(
       content: Text("Invalid session! Please log in again."),
+      backgroundColor: Colors.red,
     ),
   );
 

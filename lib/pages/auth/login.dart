@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.green,
           ),
         );
 
@@ -51,11 +52,12 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) => const NoteListPage(),
           ),
         );
-      } else if (req.statusCode == 400 || req.statusCode == 404) {
+      } else if (req.statusCode == 400) {
         // show error message
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.red,
           ),
         );
       } else {

@@ -42,6 +42,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.green,
           ),
         );
         navigator.pushReplacement(
@@ -49,11 +50,12 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
             builder: (context) => const LoginPage(),
           ),
         );
-      } else if (req.statusCode == 400 || req.statusCode == 404) {
+      } else if (req.statusCode == 400) {
         // show error message
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),
+            backgroundColor: Colors.red,
           ),
         );
       } else {

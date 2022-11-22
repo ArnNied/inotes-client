@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:inotes/core/auth.dart';
 import 'package:inotes/core/functions.dart';
 import 'package:inotes/core/session.dart';
