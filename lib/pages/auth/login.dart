@@ -24,6 +24,19 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  void _navigateAwayIfSessionExists() async {
+    final navigator = Navigator.of(context);
+    final session = await Session.get();
+    if (session != "") {
+      navigator.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const NoteListPage(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
   void _onLoginButtonPressed() async {
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
@@ -81,6 +94,13 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => const RegisterPage(),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _navigateAwayIfSessionExists();
   }
 
   @override

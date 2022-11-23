@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inotes/pages/auth/login.dart';
-import 'package:inotes/pages/note/list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
         }),
         fontFamily: 'Poppins',
       ),
-      home: const NoteListPage(),
+      home: const LoginPage(),
     );
   }
 }
