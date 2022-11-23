@@ -9,7 +9,6 @@ class User {
     return await Requests().get(
       endpoint: "/user",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
     );
@@ -24,7 +23,6 @@ class User {
     return await Requests().patch(
       endpoint: "/user",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
@@ -43,7 +41,6 @@ class User {
     return await Requests().post(
       endpoint: "/user/change-password",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
@@ -57,7 +54,6 @@ class User {
     return await Requests().delete(
       endpoint: "/user",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
     );

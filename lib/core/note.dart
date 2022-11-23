@@ -9,7 +9,6 @@ class Note {
     return await Requests().get(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
     );
@@ -19,7 +18,6 @@ class Note {
     return await Requests().get(
       endpoint: "/note",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
     );
@@ -33,7 +31,6 @@ class Note {
     return await Requests().post(
       endpoint: "/note",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
@@ -52,7 +49,6 @@ class Note {
     return await Requests().patch(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
       body: jsonEncode({
@@ -66,7 +62,6 @@ class Note {
     return await Requests().delete(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: session,
       },
     );
