@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) => const NoteListPage(),
           ),
         );
-      } else if (req.statusCode == 400) {
+      } else if (req.statusCode == 400 || req.statusCode == 404) {
         // show error message
         messenger.showSnackBar(
           SnackBar(
