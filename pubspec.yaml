@@ -67,7 +67,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/image/drawer.jpg
-    - .env
   fonts:
     - family: Poppins
       fonts:

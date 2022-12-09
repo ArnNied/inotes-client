@@ -23,7 +23,7 @@ void clearSessionThenRedirectToLogin(
 }
 
 String formatDate(int unixTimestamp) {
-  final dt = DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
+  final dt = DateTime.fromMillisecondsSinceEpoch(unixTimestamp);
 
   return dt.toString().split('.').first;
 }

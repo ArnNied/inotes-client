@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class Requests {
-  final String _baseUrl = dotenv.env["API_URL"] as String;
+  final String _baseUrl = "https://asia-southeast2-inotes-dfe51.cloudfunctions.net";
 
   Map<String, String> _appendHeaders(Map<String, String>? headers) {
     return {
