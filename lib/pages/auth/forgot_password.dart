@@ -17,11 +17,17 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final _formKey = GlobalKey<FormState>();
-
   final _emailController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
+  var _canBeClicked = true;
+
   void _onResetButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
@@ -52,6 +58,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         );
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   void _onLoginButtonPressed() {
@@ -120,7 +130,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     const SizedBox(height: 15),
                     ButtonBlue(
                       label: "RESET",
-                      onPressed: _onResetButtonPressed,
+                      onPressed: _canBeClicked ? _onResetButtonPressed : null,
                     ),
                     const SizedBox(height: 10),
                     const Divider(

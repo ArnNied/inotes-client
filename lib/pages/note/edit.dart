@@ -22,12 +22,18 @@ class NoteEditPage extends StatefulWidget {
 }
 
 class _NoteEditPageState extends State<NoteEditPage> {
-  final _formKey = GlobalKey<FormState>();
-
   final _noteTitleController = TextEditingController();
   final _noteBodyController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
+  var _canBeClicked = true;
+
   void _onUpdateNoteButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
@@ -49,10 +55,11 @@ class _NoteEditPageState extends State<NoteEditPage> {
           ),
         );
 
-        navigator.pushReplacement(
+        navigator.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const NoteListPage(),
           ),
+          (route) => false,
         );
       } else if (req.statusCode == 401) {
         clearSessionThenRedirectToLogin(navigator, messenger);
@@ -65,6 +72,10 @@ class _NoteEditPageState extends State<NoteEditPage> {
         );
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   @override
@@ -123,10 +134,9 @@ class _NoteEditPageState extends State<NoteEditPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: ButtonBlue(
-          label: "Update Note",
-          height: 50,
-          onPressed: _onUpdateNoteButtonPressed,
-        ),
+            label: "Update Note",
+            height: 50,
+            onPressed: _canBeClicked ? _onUpdateNoteButtonPressed : null),
       ),
     );
   }

@@ -18,11 +18,13 @@ class ChangeInfoSection extends StatefulWidget {
 }
 
 class _ChangeInfoSectionState extends State<ChangeInfoSection> {
-  final _formKey = GlobalKey<FormState>();
-
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  var _canBeClicked = true;
 
   void _fetchUserInfo() async {
     final navigator = Navigator.of(context);
@@ -45,6 +47,10 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
   }
 
   void _onUpdateInfoButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
@@ -76,6 +82,10 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
         );
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   @override
@@ -127,7 +137,7 @@ class _ChangeInfoSectionState extends State<ChangeInfoSection> {
             const SizedBox(height: 15),
             ButtonBlue(
               label: "Update Basic Information",
-              onPressed: _onUpdateInfoButtonPressed,
+              onPressed: _canBeClicked ? _onUpdateInfoButtonPressed : null,
             ),
           ],
         ),

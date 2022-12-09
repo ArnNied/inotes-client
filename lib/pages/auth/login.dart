@@ -18,11 +18,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  var _canBeClicked = true;
 
   void _navigateAwayIfSessionExists() async {
     final navigator = Navigator.of(context);
@@ -38,6 +40,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
       final navigator = Navigator.of(context);
@@ -47,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
         _emailController.text,
         _passwordController.text,
       );
-
       final res = ResponseModel.fromJson(jsonDecode(req.body));
 
       if (req.statusCode == 200) {
@@ -60,10 +65,11 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
 
-        navigator.pushReplacement(
+        navigator.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const NoteListPage(),
           ),
+          (route) => false,
         );
       } else if (req.statusCode == 400 || req.statusCode == 404) {
         // show error message
@@ -78,6 +84,10 @@ class _LoginPageState extends State<LoginPage> {
         throw Exception("Unexpected status code: ${req.statusCode}");
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   void _onForgotPasswordButtonPressed() {
@@ -156,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 15),
                     ButtonBlue(
                       label: "LOGIN",
-                      onPressed: _onLoginButtonPressed,
+                      onPressed: _canBeClicked ? _onLoginButtonPressed : null,
                     ),
                     const SizedBox(height: 10),
                     TextButton(

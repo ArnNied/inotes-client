@@ -17,14 +17,20 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool _isHidden = true;
-
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+  bool _isHidden = true;
+
+  var _canBeClicked = true;
+
   void _onRegisterButtonClick() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
       final navigator = Navigator.of(context);
@@ -63,6 +69,10 @@ class _RegisterPageState extends State<RegisterPage> {
             "Unexpected status code: ${req.statusCode} ${res.message}");
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   @override
@@ -132,9 +142,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
                     ButtonBlue(
-                      label: "REGISTER",
-                      onPressed: _onRegisterButtonClick,
-                    ),
+                        label: "REGISTER",
+                        onPressed:
+                            _canBeClicked ? _onRegisterButtonClick : null),
                     const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.only(top: 5, bottom: 5),

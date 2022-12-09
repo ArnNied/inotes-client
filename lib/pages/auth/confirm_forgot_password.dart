@@ -18,14 +18,20 @@ class ConfirmForgotPasswordPage extends StatefulWidget {
 }
 
 class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool _isHidden = true;
-
   final _resetCodeController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmNewPasswordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+  bool _isHidden = true;
+
+  var _canBeClicked = true;
+
   void _onResetButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       // "Do not use BuildContexts across async gaps" workaround
       final navigator = Navigator.of(context);
@@ -63,6 +69,10 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
         throw Exception("Unexpected status code: ${req.statusCode}");
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   void _onCancelButtonPressed() {
@@ -171,7 +181,7 @@ class _ConfirmForgotPasswordPageState extends State<ConfirmForgotPasswordPage> {
                     const SizedBox(height: 10),
                     ButtonBlue(
                       label: "RESET PASSWORD",
-                      onPressed: _onResetButtonPressed,
+                      onPressed: _canBeClicked ? _onResetButtonPressed : null,
                     ),
                     const SizedBox(height: 10),
                     ButtonBlueInverted(

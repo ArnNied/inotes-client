@@ -16,7 +16,13 @@ class DeleteAccountSection extends StatefulWidget {
 }
 
 class _DeleteAccountSectionState extends State<DeleteAccountSection> {
+  var _canBeClicked = true;
+
   void _onConfirmDeleteAccountButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
 
@@ -50,6 +56,10 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
         ),
       );
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   void warningDelete() {
@@ -76,7 +86,9 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
               Expanded(
                 child: ButtonRedInverted(
                   label: "CONFIRM",
-                  onPressed: _onConfirmDeleteAccountButtonPressed,
+                  onPressed: _canBeClicked
+                      ? _onConfirmDeleteAccountButtonPressed
+                      : null,
                 ),
               ),
             ],

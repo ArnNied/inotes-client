@@ -19,12 +19,18 @@ class NoteCreatePage extends StatefulWidget {
 }
 
 class _NoteCreatePageState extends State<NoteCreatePage> {
-  final _formKey = GlobalKey<FormState>();
-
   final _noteTitleController = TextEditingController();
   final _noteBodyController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
+  var _canBeClicked = true;
+
   void _onAddNoteButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
@@ -44,10 +50,11 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
             backgroundColor: Colors.green,
           ),
         );
-        navigator.pushReplacement(
+        navigator.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const NoteListPage(),
           ),
+          (route) => false,
         );
       } else if (req.statusCode == 401) {
         clearSessionThenRedirectToLogin(navigator, messenger);
@@ -60,6 +67,10 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
         );
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   @override
@@ -108,10 +119,9 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: ButtonBlue(
-          label: "Add Note",
-          height: 50,
-          onPressed: _onAddNoteButtonPressed,
-        ),
+            label: "Add Note",
+            height: 50,
+            onPressed: _canBeClicked ? _onAddNoteButtonPressed : null),
       ),
     );
   }

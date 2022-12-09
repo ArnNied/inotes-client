@@ -17,14 +17,20 @@ class ChangePasswordSection extends StatefulWidget {
 }
 
 class _ChangePasswordSectionState extends State<ChangePasswordSection> {
-  final _formKey = GlobalKey<FormState>();
-  bool _isHidden = true;
-
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmNewPasswordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+  bool _isHidden = true;
+
+  var _canBeClicked = true;
+
   void _onChangePasswordButtonPressed() async {
+    setState(() {
+      _canBeClicked = false;
+    });
+
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
@@ -55,6 +61,10 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
         );
       }
     }
+
+    setState(() {
+      _canBeClicked = true;
+    });
   }
 
   @override
@@ -100,7 +110,7 @@ class _ChangePasswordSectionState extends State<ChangePasswordSection> {
             const SizedBox(height: 15),
             ButtonBlue(
               label: "Change Password",
-              onPressed: _onChangePasswordButtonPressed,
+              onPressed: _canBeClicked ? _onChangePasswordButtonPressed : null,
             ),
           ],
         ),
