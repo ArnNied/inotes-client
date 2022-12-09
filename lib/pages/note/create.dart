@@ -37,7 +37,7 @@ class _NoteCreatePageState extends State<NoteCreatePage> {
       );
       final res = ResponseModel.fromJson(jsonDecode(req.body));
 
-      if (req.statusCode == 200) {
+      if (req.statusCode == 200 || req.statusCode == 201) {
         messenger.showSnackBar(
           SnackBar(
             content: Text(res.message),

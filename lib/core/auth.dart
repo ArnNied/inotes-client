@@ -25,11 +25,11 @@ class Auth {
     );
   }
 
-  Future<http.Response> logout(String sessionHash) async {
+  Future<http.Response> logout(String session) async {
     return await Requests().post(
       endpoint: "/auth/logout",
       headers: {
-        HttpHeaders.authorizationHeader: sessionHash,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
     );
   }

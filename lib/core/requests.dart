@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class Requests {
-  final String _baseUrl = "http://localhost:8080";
+  final String _baseUrl = dotenv.env["API_URL"] as String;
 
   Map<String, String> _appendHeaders(Map<String, String>? headers) {
     return {

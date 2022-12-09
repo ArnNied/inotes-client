@@ -9,6 +9,7 @@ import 'package:inotes/model/response.dart';
 import 'package:inotes/model/user.dart';
 import 'package:inotes/pages/account/account.dart';
 import 'package:inotes/pages/auth/login.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -30,7 +31,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
     if (req.statusCode == 200) {
       return UserModel.fromJson(res.data);
-    } else if (req.statusCode == 401) {
+    } else if (req.statusCode == 401 || req.statusCode == 404) {
       clearSessionThenRedirectToLogin(navigator, messenger);
 
       return UserModel(email: "");
@@ -75,25 +76,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  // void _onAboutUsButtonPressed() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: const Text('About Us'),
-  //         content: const Text('iNotes is a simple note-taking app.'),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text('OK'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _onAboutUsButtonPressed() async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    const url = "https://github.com/ArnNied/inotes-client";
+    final can = await canLaunchUrl(Uri.parse(url));
+
+    if(can) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text("Failed to open url"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +157,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
             title: const Text("My Account"),
             onTap: _onMyAccountButtonPressed,
           ),
-          // ListTile(
-          //   trailing: const Icon(Icons.info),
-          //   title: const Text("About Us"),
-          //   onTap: () => _onAboutUsButtonPressed(),
-          // ),
+          ListTile(
+            trailing: const Icon(Icons.info),
+            title: const Text("About Us"),
+            onTap: () => _onAboutUsButtonPressed(),
+          ),
           ListTile(
             trailing: const Icon(Icons.logout),
             title: const Text("Logout"),

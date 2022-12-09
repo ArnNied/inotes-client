@@ -25,6 +25,8 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
     final res = ResponseModel.fromJson(jsonDecode(req.body));
 
     if (req.statusCode == 200) {
+      await Session.clear();
+
       messenger.showSnackBar(
         SnackBar(
           content: Text(res.message),
@@ -109,7 +111,7 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
           Container(
             alignment: Alignment.centerLeft,
             child: const Text(
-              "By clicking this button you acknowledged that every single data concerning you (this includes notes, email, password, and full name) will be deleted permanently and cannot be reversed.",
+              "By clicking this button you acknowledge that every single data concerning you (this includes notes, email, password, and full name) will be deleted permanently and cannot be reversed.",
               style: TextStyle(fontSize: 15),
             ),
           ),

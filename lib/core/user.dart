@@ -9,7 +9,7 @@ class User {
     return await Requests().get(
       endpoint: "/user",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
     );
   }
@@ -23,7 +23,7 @@ class User {
     return await Requests().patch(
       endpoint: "/user",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
       body: jsonEncode({
         "email": email,
@@ -41,7 +41,7 @@ class User {
     return await Requests().post(
       endpoint: "/user/change-password",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
       body: jsonEncode({
         "current_password": currentPassword,
@@ -54,7 +54,7 @@ class User {
     return await Requests().delete(
       endpoint: "/user",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
     );
   }

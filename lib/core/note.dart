@@ -9,7 +9,7 @@ class Note {
     return await Requests().get(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
     );
   }
@@ -18,7 +18,7 @@ class Note {
     return await Requests().get(
       endpoint: "/note",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
     );
   }
@@ -31,7 +31,7 @@ class Note {
     return await Requests().post(
       endpoint: "/note",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
       body: jsonEncode({
         "title": title,
@@ -49,7 +49,7 @@ class Note {
     return await Requests().patch(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
       body: jsonEncode({
         "title": title,
@@ -62,7 +62,7 @@ class Note {
     return await Requests().delete(
       endpoint: "/note/$noteId",
       headers: {
-        HttpHeaders.authorizationHeader: session,
+        HttpHeaders.authorizationHeader: "Bearer $session",
       },
     );
   }
