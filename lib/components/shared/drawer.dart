@@ -82,7 +82,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     const url = "https://github.com/ArnNied/inotes-client";
     final can = await canLaunchUrl(Uri.parse(url));
 
-    if(can) {
+    if (can) {
       await launchUrl(Uri.parse(url));
     } else {
       messenger.showSnackBar(
@@ -159,7 +159,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           ListTile(
             trailing: const Icon(Icons.info),
-            title: const Text("About Us"),
+            title: const Text("About"),
             onTap: () => _onAboutUsButtonPressed(),
           ),
           ListTile(

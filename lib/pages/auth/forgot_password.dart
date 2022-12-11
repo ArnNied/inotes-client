@@ -117,7 +117,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ),
                     const Text(
-                      "We will reset your account's password and send you an email containing the new password. Please change your password after you log in",
+                      "We will send a 6 digit token to your email for you tu use it on the next page. This token is valid for 5 minutes.",
                       style: TextStyle(
                         fontSize: 13,
                         color: Color.fromARGB(255, 2, 2, 2),
