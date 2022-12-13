@@ -64,8 +64,10 @@ class _DeleteAccountSectionState extends State<DeleteAccountSection> {
 
   void warningDelete() {
     AlertDialog alert = AlertDialog(
-      title: const Text("Are you Sure?",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+      title: const Text(
+        "Are you Sure?",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+      ),
       content: const Text(
           "This is the final step of your account deletion. This action is permanent and irreversible."),
       actions: [
